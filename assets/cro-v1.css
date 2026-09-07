@@ -1,0 +1,429 @@
+/*
+ * Top Locações — camada CRO mobile-conversion-v1
+ * Mantém a aplicação compilada intacta e aplica somente ajustes P0/P1.
+ */
+
+#produtos,
+#product-form {
+  scroll-margin-top: 7.5rem;
+}
+
+.cro-sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Prova rápida antes da escolha do equipamento. */
+.cro-trust {
+  background: #111;
+  border-top: 1px solid rgba(245, 166, 35, 0.22);
+  border-bottom: 1px solid rgba(245, 166, 35, 0.22);
+  padding: 1rem 0;
+}
+
+.cro-trust__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+.cro-trust__item {
+  display: flex;
+  min-width: 0;
+  min-height: 3.75rem;
+  padding: 0.35rem 1rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  text-align: left;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cro-trust__item:last-child {
+  border-right: 0;
+}
+
+.cro-trust__number,
+.cro-trust__icon {
+  flex: 0 0 auto;
+  color: var(--primary);
+  font-family: var(--font-heading);
+  font-size: 1.55rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.cro-trust__label {
+  color: var(--text-secondary);
+  font-family: var(--font-sub);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+/* A arte do Hero já contém uma chamada de orçamento: agora ela é acionável. */
+.cro-hero-image-action,
+.cro-product-image-action {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  cursor: pointer;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+}
+
+.cro-hero-image-action:focus-visible,
+.cro-product-image-action:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: -4px;
+}
+
+.cro-product-image-action__label {
+  position: absolute;
+  right: 0.75rem;
+  bottom: 0.75rem;
+  display: inline-flex;
+  min-height: 2.5rem;
+  padding: 0.5rem 0.75rem;
+  align-items: center;
+  justify-content: center;
+  color: var(--bg);
+  background: rgba(245, 166, 35, 0.96);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  font-family: var(--font-sub);
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.product-card__footer.cro-product-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 0.75rem;
+}
+
+.product-card__footer.cro-product-actions .btn {
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.65rem 0.8rem;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.product-card__budget-cta {
+  box-shadow: 0 4px 14px rgba(245, 166, 35, 0.24);
+}
+
+/* Os mesmos números foram promovidos para a faixa de confiança acima. */
+.home.home--cro-v1 .social-proof__stats {
+  display: none;
+}
+
+/* CTA persistente, limitado a telas móveis. */
+.cro-sticky-cta {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  body.cro-has-sticky-cta {
+    padding-bottom: calc(4.6rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  #produtos,
+  #product-form {
+    scroll-margin-top: 6.25rem;
+  }
+
+  .cro-sticky-cta {
+    position: fixed;
+    right: max(0.75rem, env(safe-area-inset-right, 0px));
+    bottom: max(0.65rem, env(safe-area-inset-bottom, 0px));
+    left: max(0.75rem, env(safe-area-inset-left, 0px));
+    z-index: 1015;
+    display: flex;
+    min-height: 3.4rem;
+    padding: 0.8rem 1rem;
+    align-items: center;
+    justify-content: center;
+    color: var(--bg);
+    background: linear-gradient(135deg, var(--primary), var(--primary-strong));
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 0.75rem;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.48), 0 0 0 1px rgba(245, 166, 35, 0.14);
+    font-family: var(--font-sub);
+    font-size: 1rem;
+    font-weight: 800;
+    line-height: 1.2;
+    cursor: pointer;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 180ms ease, transform 180ms ease, visibility 180ms ease;
+  }
+
+  .cro-sticky-cta::before {
+    content: "";
+    width: 0.5rem;
+    height: 0.5rem;
+    margin-right: 0.65rem;
+    background: #171717;
+    border-radius: 50%;
+  }
+
+  .cro-sticky-cta:focus-visible {
+    outline: 3px solid #fff;
+    outline-offset: 2px;
+  }
+
+  .cro-sticky-cta.is-hidden {
+    visibility: hidden;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(calc(100% + 1.5rem));
+  }
+
+  /* P0: o CTA aparece antes dos microbenefícios e o Hero deixa de forçar 940 px. */
+  .home-hero {
+    min-height: auto !important;
+    padding: 1.25rem 0 1.5rem !important;
+  }
+
+  .home-hero .container {
+    gap: 1rem !important;
+  }
+
+  .home-hero__content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 35rem;
+    margin: 0 auto;
+  }
+
+  .home-hero__badge {
+    align-self: center;
+    margin-bottom: 0.65rem !important;
+  }
+
+  .home-hero__title {
+    margin-bottom: 0.75rem !important;
+    font-size: clamp(2rem, 9.5vw, 2.5rem) !important;
+    line-height: 1.04 !important;
+  }
+
+  .home-hero__subtitle {
+    margin-bottom: 1rem !important;
+    font-size: 1rem !important;
+    line-height: 1.48 !important;
+  }
+
+  .home-hero__actions {
+    order: 4;
+    width: 100%;
+    gap: 0.625rem !important;
+  }
+
+  .home-hero__actions .btn {
+    width: min(100%, 23rem);
+    min-height: 3.15rem;
+  }
+
+  .home-hero__actions .btn-primary {
+    padding: 0.75rem 1.25rem !important;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow: 0 6px 22px rgba(245, 166, 35, 0.38) !important;
+    font-size: 1rem !important;
+    font-weight: 800 !important;
+  }
+
+  .home-hero__microbenefits {
+    order: 5;
+    width: min(100%, 23rem);
+    max-width: none !important;
+    margin: 0.9rem auto 0 !important;
+    gap: 0.35rem !important;
+  }
+
+  .home-hero__microbenefit {
+    font-size: 0.875rem !important;
+    line-height: 1.35;
+  }
+
+  .home-hero__micro-proof {
+    order: 6;
+    margin-top: 0.7rem !important;
+    font-size: 0.8rem !important;
+  }
+
+  .home-hero__image-container {
+    width: min(100%, 16.25rem) !important;
+    max-width: 16.25rem !important;
+    margin: 0 auto;
+    border-radius: 0.75rem !important;
+  }
+
+  .cro-trust {
+    padding: 0.75rem 0;
+  }
+
+  .cro-trust .container {
+    padding: 0 0.5rem;
+  }
+
+  .cro-trust__item {
+    min-height: 3.5rem;
+    padding: 0.3rem 0.45rem;
+    gap: 0.35rem;
+    text-align: center;
+    flex-direction: column;
+  }
+
+  .cro-trust__number,
+  .cro-trust__icon {
+    font-size: 1.2rem;
+  }
+
+  .cro-trust__label {
+    font-size: 0.8125rem;
+    line-height: 1.2;
+  }
+
+  /* Decisão de produto mais curta, sem remover informações dos cards. */
+  .product-selection {
+    padding: 2rem 0 !important;
+  }
+
+  .product-selection__header {
+    margin-bottom: 1.25rem !important;
+  }
+
+  .product-selection__grid {
+    gap: 1rem !important;
+  }
+
+  .product-card {
+    min-height: auto !important;
+  }
+
+  .product-card__image-wrapper {
+    height: 9.5rem !important;
+  }
+
+  .product-card__content {
+    padding: 1rem !important;
+  }
+
+  .product-card__header {
+    margin-bottom: 0.75rem !important;
+  }
+
+  .product-card__features {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.45rem 0.75rem;
+    margin-bottom: 0.9rem !important;
+  }
+
+  .product-card__features .feature-item {
+    min-width: 0;
+    margin-bottom: 0 !important;
+    align-items: flex-start;
+  }
+
+  .product-card__features .feature-item__text {
+    font-size: 0.82rem;
+    line-height: 1.3;
+  }
+
+  .product-card__footer {
+    padding: 0 1rem 1rem !important;
+  }
+
+  .product-card__footer.cro-product-actions {
+    gap: 0.55rem;
+  }
+
+  .product-card__footer.cro-product-actions .btn {
+    min-height: 3.1rem;
+    padding: 0.6rem;
+    font-size: 0.875rem;
+  }
+
+  /* O formulário original foi preservado; apenas reduzimos espaço improdutivo. */
+  .product-form {
+    padding: 2rem 0 !important;
+  }
+
+  .product-form__form-container {
+    margin: 1.25rem 0 0 !important;
+  }
+
+  .product-form__card {
+    padding: 1rem !important;
+  }
+
+  .product-form__card-description {
+    margin-bottom: 1rem !important;
+    line-height: 1.5 !important;
+  }
+
+  .product-form__form {
+    gap: 0.75rem !important;
+  }
+
+  .product-form__input,
+  .product-form__select {
+    min-height: 3rem;
+    padding: 0.7rem 0.9rem !important;
+    font-size: 1rem !important;
+  }
+
+  .product-form__button {
+    min-height: 3.25rem;
+    margin-top: 0.25rem !important;
+    padding: 0.75rem 1rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-hero__image-container {
+    width: min(100%, 14.5rem) !important;
+    max-width: 14.5rem !important;
+  }
+
+  .cro-product-image-action__label {
+    right: 0.55rem;
+    bottom: 0.55rem;
+    min-height: 2.35rem;
+    padding: 0.45rem 0.65rem;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .cro-trust__item {
+    padding-inline: 0.25rem;
+  }
+
+  .product-card__footer.cro-product-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cro-sticky-cta {
+    transition: none;
+  }
+}
