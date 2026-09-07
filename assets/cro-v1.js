@@ -154,13 +154,37 @@
     home.classList.add("home--cro-v1");
   }
 
+  function bindAction(element, callback) {
+    if (!element) return;
+    element.addEventListener("click", callback);
+    element.addEventListener("keydown", function (event) {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        callback();
+      }
+    });
+  }
+
   function enhanceHero() {
     var hero = document.querySelector(".home-hero");
     if (!hero) return;
 
+    var title = hero.querySelector(".home-hero__title");
     var primary = hero.querySelector(".home-hero__actions .btn-primary");
     var secondary = hero.querySelector(".home-hero__actions .btn-secondary");
     var imageContainer = hero.querySelector(".home-hero__image-container");
+
+    if (title && !title.dataset.croTitleAction) {
+      title.dataset.croTitleAction = CRO_VERSION;
+      title.classList.add("cro-hero-title-action");
+      title.setAttribute("role", "button");
+      title.setAttribute("tabindex", "0");
+      title.setAttribute("aria-label", "Ir para o formulário de orçamento");
+      bindAction(title, function () {
+        pushEvent("cro_cta_click", { cta_location: "hero_title", cta_type: "heading" });
+        scrollToElement(getForm());
+      });
+    }
 
     if (primary && !primary.dataset.croEnhanced) {
       primary.dataset.croEnhanced = CRO_VERSION;
@@ -228,8 +252,8 @@
       imageButton.type = "button";
       imageButton.className = "cro-product-image-action";
       imageButton.setAttribute("aria-label", "Selecionar " + productName + " e solicitar orçamento");
-      imageButton.innerHTML =
-        '<span class="cro-product-image-action__label">Orçar este modelo</span>';
+      imageButton.title = "Solicitar orçamento";
+      imageButton.innerHTML = '<span class="cro-sr-only">Solicitar orçamento</span>';
       imageButton.addEventListener("click", function () {
         preselectProduct(productName, "product_image", true);
       });
