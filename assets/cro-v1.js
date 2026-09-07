@@ -433,6 +433,43 @@
     formVisibilityObserver.observe(getForm());
   }
 
+  function enhanceThankYou() {
+    if (window.location.pathname !== "/obrigado") return;
+    if (document.querySelector(".cro-whatsapp-cta")) return;
+
+    var target = Array.prototype.find.call(
+      document.querySelectorAll("a, button"),
+      function (element) {
+        var text = (element.textContent || "").trim().toLowerCase();
+        return (
+          text.indexOf("voltar para o início") !== -1 ||
+          text.indexOf("voltar para o inicio") !== -1
+        );
+      }
+    );
+
+    if (!target) return;
+
+    var link = document.createElement("a");
+    link.href = "https://wa.me/5516981357855";
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.className = (target.className || "") + " cro-whatsapp-cta";
+    link.setAttribute("aria-label", "Falar com a Top Locações no WhatsApp");
+    link.innerHTML =
+      '<img class="cro-whatsapp-cta__icon" src="/assets/whatsapp-icon.png" alt="" aria-hidden="true">' +
+      "<span>Falar no WhatsApp</span>";
+
+    link.addEventListener("click", function () {
+      pushEvent("cro_whatsapp_click", {
+        cta_location: "thank_you",
+        phone: "5516981357855",
+      });
+    });
+
+    target.replaceWith(link);
+  }
+
   function trackConfirmedLead() {
     if (window.location.pathname !== "/obrigado") return;
     var pending = null;
@@ -453,6 +490,7 @@
   function enhance() {
     scheduled = false;
     trackConfirmedLead();
+    enhanceThankYou();
     if (window.location.pathname === "/") {
       reorderHome();
       enhanceHero();
