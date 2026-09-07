@@ -69,6 +69,17 @@
   line-height: 1.25;
 }
 
+/* H1 agora também é um caminho para o orçamento. */
+.cro-hero-title-action {
+  cursor: pointer;
+}
+
+.cro-hero-title-action:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 0.35rem;
+  border-radius: 0.4rem;
+}
+
 /* A arte do Hero já contém uma chamada de orçamento: agora ela é acionável. */
 .cro-hero-image-action,
 .cro-product-image-action {
@@ -90,23 +101,19 @@
   outline-offset: -4px;
 }
 
-.cro-product-image-action__label {
-  position: absolute;
-  right: 0.75rem;
-  bottom: 0.75rem;
-  display: inline-flex;
-  min-height: 2.5rem;
-  padding: 0.5rem 0.75rem;
-  align-items: center;
-  justify-content: center;
-  color: var(--bg);
-  background: rgba(245, 166, 35, 0.96);
-  border-radius: var(--radius-md);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
-  font-family: var(--font-sub);
-  font-size: 0.875rem;
-  font-weight: 700;
-  line-height: 1.15;
+.product-card__image-wrapper,
+.product-card__image {
+  overflow: hidden;
+}
+
+.product-card__image-wrapper img,
+.product-card__image img,
+.product-card__image-wrapper picture img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  transform: scale(1.1);
 }
 
 .product-card__footer.cro-product-actions {
@@ -248,6 +255,12 @@
     font-weight: 800 !important;
   }
 
+  .home-hero__actions .btn-secondary {
+    min-height: 2.2rem !important;
+    padding: 0.45rem 1rem !important;
+    font-size: 0.95rem !important;
+  }
+
   .home-hero__microbenefits {
     order: 5;
     width: min(100%, 23rem);
@@ -272,6 +285,12 @@
     max-width: 16.25rem !important;
     margin: 0 auto;
     border-radius: 0.75rem !important;
+  }
+
+  .home-hero__image-container img,
+  .home-hero__image,
+  .home-hero__image img {
+    filter: brightness(1.18) contrast(1.05) saturate(1.05);
   }
 
   .cro-trust {
@@ -401,14 +420,6 @@
   .home-hero__image-container {
     width: min(100%, 14.5rem) !important;
     max-width: 14.5rem !important;
-  }
-
-  .cro-product-image-action__label {
-    right: 0.55rem;
-    bottom: 0.55rem;
-    min-height: 2.35rem;
-    padding: 0.45rem 0.65rem;
-    font-size: 0.8rem;
   }
 }
 
