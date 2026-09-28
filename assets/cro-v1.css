@@ -1332,3 +1332,22 @@ body.cro-v3-ready {
     padding: 1rem 4.5rem 1rem 1rem;
   }
 }
+
+/* Navegação móvel legível sobre o cabeçalho claro. */
+@media (max-width: 768px) {
+  .cro-v3-ready .nav-toggle span {
+    background: var(--cro-ink) !important;
+  }
+
+  .cro-v3-ready .nav-list {
+    color: var(--cro-ink) !important;
+    background: #fff !important;
+    border-top: 1px solid rgba(22, 22, 22, 0.08);
+    box-shadow: 0 18px 30px rgba(20, 20, 20, 0.12);
+  }
+
+  .cro-v3-ready .nav-list a,
+  .cro-v3-ready .nav-link {
+    color: var(--cro-ink) !important;
+  }
+}
