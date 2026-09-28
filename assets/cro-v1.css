@@ -8,6 +8,135 @@
   scroll-margin-top: 7.5rem;
 }
 
+/* Qualificação progressiva antes do WhatsApp. */
+body.cro-lead-modal-open { overflow: hidden; }
+
+.cro-lead-modal[hidden],
+.cro-lead-step[hidden] { display: none !important; }
+
+.cro-lead-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+
+.cro-lead-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.7);
+  backdrop-filter: blur(5px);
+}
+
+.cro-lead-modal__dialog {
+  position: relative;
+  width: min(100%, 34rem);
+  max-height: min(92vh, 44rem);
+  overflow-y: auto;
+  padding: clamp(1.35rem, 4vw, 2.25rem);
+  color: #161616;
+  background: #fff;
+  border: 1px solid rgba(22, 22, 22, 0.1);
+  border-radius: 1.4rem;
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.35);
+}
+
+.cro-lead-modal__close {
+  position: absolute;
+  top: 0.8rem;
+  right: 0.9rem;
+  width: 2.4rem;
+  height: 2.4rem;
+  padding: 0;
+  color: #303030;
+  background: #f2f3f4;
+  border: 0;
+  border-radius: 50%;
+  font-size: 1.65rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.cro-lead-modal__eyebrow,
+.cro-lead-modal__count {
+  color: #876600;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.cro-lead-modal__progress {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.4rem;
+  margin: 0.85rem 3rem 1.6rem 0;
+}
+
+.cro-lead-modal__progress span {
+  height: 0.3rem;
+  background: #e5e6e8;
+  border-radius: 99px;
+}
+
+.cro-lead-modal__progress span.is-active { background: #f5c400; }
+.cro-lead-modal__count { margin-bottom: 0.55rem; }
+.cro-lead-modal h2 { margin: 0 0 0.65rem; color: #161616; font-size: clamp(1.55rem, 5vw, 2.15rem); line-height: 1.08; }
+.cro-lead-modal p { margin: 0 0 1.35rem; color: #62656a; line-height: 1.55; }
+
+.cro-lead-options { display: grid; gap: 0.7rem; }
+.cro-lead-options button {
+  display: grid;
+  gap: 0.2rem;
+  width: 100%;
+  padding: 1rem 1.1rem;
+  color: #161616;
+  text-align: left;
+  background: #f7f8f8;
+  border: 1px solid rgba(22, 22, 22, 0.1);
+  border-radius: 0.9rem;
+  cursor: pointer;
+  transition: border-color 160ms ease, transform 160ms ease, background 160ms ease;
+}
+.cro-lead-options button:hover,
+.cro-lead-options button:focus-visible { background: #fff9df; border-color: #d9aa00; transform: translateY(-1px); }
+.cro-lead-options strong { font-size: 1rem; }
+.cro-lead-options span { color: #696c70; font-size: 0.84rem; }
+
+.cro-lead-field { display: grid; gap: 0.45rem; }
+.cro-lead-field > span { color: #303236; font-size: 0.82rem; font-weight: 750; }
+.cro-lead-field input {
+  width: 100%;
+  min-height: 3.35rem;
+  padding: 0.8rem 0.95rem;
+  color: #161616;
+  background: #fff;
+  border: 1px solid #cfd1d4;
+  border-radius: 0.75rem;
+  font: inherit;
+}
+.cro-lead-field input:focus { outline: 3px solid rgba(245, 196, 0, 0.28); border-color: #a98000; }
+
+.cro-lead-consent { display: flex; gap: 0.65rem; margin-top: 1rem; color: #56595e; font-size: 0.78rem; line-height: 1.4; }
+.cro-lead-consent input { width: 1.1rem; height: 1.1rem; flex: 0 0 auto; margin-top: 0.08rem; accent-color: #128c43; }
+.cro-lead-modal__error { min-height: 1.25rem; margin-top: 0.55rem; color: #aa1d1d; font-size: 0.78rem; font-weight: 650; }
+
+.cro-lead-modal__actions { display: grid; grid-template-columns: auto 1fr; gap: 0.7rem; margin-top: 0.8rem; }
+.cro-lead-modal__actions button { min-height: 3.1rem; padding: 0.75rem 1rem; border-radius: 0.75rem; font-weight: 800; cursor: pointer; }
+.cro-lead-back { color: #444; background: #f1f2f3; border: 0; }
+.cro-lead-next,
+.cro-lead-finish { color: #fff; background: #128c43; border: 1px solid #128c43; box-shadow: 0 8px 20px rgba(18, 140, 67, 0.2); }
+.cro-lead-skip { display: block; margin: 1rem auto 0; padding: 0.4rem; color: #666; background: transparent; border: 0; font-size: 0.78rem; text-decoration: underline; cursor: pointer; }
+
+@media (max-width: 520px) {
+  .cro-lead-modal { align-items: end; padding: 0; }
+  .cro-lead-modal__dialog { width: 100%; max-height: 92vh; padding: 1.35rem 1rem calc(1.25rem + env(safe-area-inset-bottom, 0px)); border-radius: 1.25rem 1.25rem 0 0; }
+  .cro-lead-modal__progress { margin-bottom: 1.15rem; }
+  .cro-lead-options button { padding: 0.85rem 0.9rem; }
+}
+
 .cro-sr-only {
   position: absolute !important;
   width: 1px !important;

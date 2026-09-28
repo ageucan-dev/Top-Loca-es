@@ -6,6 +6,10 @@
   var PHONE_DISPLAY = "(16) 99263-1992";
   var ROTATION_MS = 4600;
   var scheduled = false;
+  var pendingWhatsApp = null;
+  var leadStep = 1;
+  var leadAnswers = { product: "", city: "", email: "" };
+  var leadReturnFocus = null;
 
   function pushEvent(name, details) {
     window.dataLayer = window.dataLayer || [];
@@ -28,14 +32,16 @@
     return "locação de balancim";
   }
 
-  function whatsAppUrl(element) {
-    var product = productContext(element);
+  function whatsAppUrl(element, answers) {
+    var product = answers && answers.product ? answers.product : productContext(element);
     var message = "Olá, Top Locações! Vim pelo site e gostaria de solicitar um orçamento para " + product + ".";
+    if (answers && answers.city) message += " A obra será em " + answers.city + ".";
+    if (answers && answers.email) message += " Meu e-mail é " + answers.email + ".";
     return "https://wa.me/" + PHONE + "?text=" + encodeURIComponent(message);
   }
 
-  function openWhatsApp(element, location) {
-    var product = productContext(element);
+  function openWhatsApp(element, location, answers) {
+    var product = answers && answers.product ? answers.product : productContext(element);
     pushEvent("whatsapp_click", {
       conversion_type: "primary",
       cta_location: location,
@@ -51,7 +57,162 @@
       cta_location: location,
       product_name: product
     });
-    window.open(whatsAppUrl(element), "_blank", "noopener,noreferrer");
+    window.open(whatsAppUrl(element, answers), "_blank", "noopener,noreferrer");
+  }
+
+  function ensureLeadModal() {
+    var existing = document.querySelector(".cro-lead-modal");
+    if (existing) return existing;
+
+    var modal = document.createElement("div");
+    modal.className = "cro-lead-modal";
+    modal.hidden = true;
+    modal.innerHTML =
+      '<div class="cro-lead-modal__backdrop" data-lead-close></div>' +
+      '<section class="cro-lead-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="cro-lead-title">' +
+      '  <button class="cro-lead-modal__close" type="button" data-lead-close aria-label="Fechar">×</button>' +
+      '  <div class="cro-lead-modal__eyebrow">ORÇAMENTO RÁPIDO</div>' +
+      '  <div class="cro-lead-modal__progress" aria-label="Progresso"><span></span><span></span><span></span></div>' +
+      '  <form class="cro-lead-modal__form" novalidate>' +
+      '    <div class="cro-lead-step" data-lead-step="1">' +
+      '      <div class="cro-lead-modal__count">Passo 1 de 3</div>' +
+      '      <h2 id="cro-lead-title">Qual balancim você precisa?</h2>' +
+      '      <p>Escolha o equipamento para prepararmos a conversa.</p>' +
+      '      <div class="cro-lead-options">' +
+      '        <button type="button" data-lead-product="balancim elétrico"><strong>Balancim elétrico</strong><span>Mais agilidade para obras maiores</span></button>' +
+      '        <button type="button" data-lead-product="balancim manual"><strong>Balancim manual</strong><span>Praticidade e ótimo custo-benefício</span></button>' +
+      '        <button type="button" data-lead-product="quero ajuda para escolher"><strong>Quero ajuda para escolher</strong><span>Nossa equipe indica o modelo ideal</span></button>' +
+      '      </div>' +
+      '    </div>' +
+      '    <div class="cro-lead-step" data-lead-step="2" hidden>' +
+      '      <div class="cro-lead-modal__count">Passo 2 de 3</div>' +
+      '      <h2>Em qual cidade será a obra?</h2>' +
+      '      <p>Assim confirmamos rapidamente a disponibilidade de atendimento.</p>' +
+      '      <label class="cro-lead-field"><span>Cidade da obra</span><input type="text" name="lead_city" autocomplete="address-level2" placeholder="Ex.: Ribeirão Preto" required></label>' +
+      '      <div class="cro-lead-modal__error" role="alert"></div>' +
+      '      <div class="cro-lead-modal__actions"><button type="button" class="cro-lead-back" data-lead-back>Voltar</button><button type="submit" class="cro-lead-next">Continuar</button></div>' +
+      '    </div>' +
+      '    <div class="cro-lead-step" data-lead-step="3" hidden>' +
+      '      <div class="cro-lead-modal__count">Passo 3 de 3</div>' +
+      '      <h2>Para concluir, qual é seu e-mail?</h2>' +
+      '      <p>Usaremos este dado para atendimento e medição da campanha.</p>' +
+      '      <label class="cro-lead-field"><span>Seu melhor e-mail</span><input type="email" name="lead_email" autocomplete="email" placeholder="voce@empresa.com.br" required></label>' +
+      '      <label class="cro-lead-consent"><input type="checkbox" name="lead_consent" required><span>Concordo com o uso do meu e-mail pela Top Locações e pelo Google Ads para atendimento e mensuração publicitária.</span></label>' +
+      '      <div class="cro-lead-modal__error" role="alert"></div>' +
+      '      <div class="cro-lead-modal__actions"><button type="button" class="cro-lead-back" data-lead-back>Voltar</button><button type="submit" class="cro-lead-finish">Abrir WhatsApp</button></div>' +
+      '    </div>' +
+      '    <button type="button" class="cro-lead-skip" data-lead-skip>Prefiro ir direto ao WhatsApp</button>' +
+      '  </form>' +
+      '</section>';
+    document.body.appendChild(modal);
+
+    modal.addEventListener("click", function (event) {
+      var product = event.target.closest("[data-lead-product]");
+      if (product) {
+        leadAnswers.product = product.dataset.leadProduct;
+        pushEvent("whatsapp_qualification_step", { step_number: 1, product_name: leadAnswers.product });
+        showLeadStep(2);
+        return;
+      }
+      if (event.target.closest("[data-lead-close]")) closeLeadModal("closed");
+      if (event.target.closest("[data-lead-back]")) showLeadStep(Math.max(1, leadStep - 1));
+      if (event.target.closest("[data-lead-skip]")) {
+        pushEvent("whatsapp_qualification_skipped", { cta_location: pendingWhatsApp.location, step_number: leadStep });
+        var pending = pendingWhatsApp;
+        closeLeadModal("skipped");
+        openWhatsApp(pending.element, pending.location);
+      }
+    });
+
+    modal.querySelector("form").addEventListener("submit", function (event) {
+      event.preventDefault();
+      var error = modal.querySelector('[data-lead-step="' + leadStep + '"] .cro-lead-modal__error');
+      if (error) error.textContent = "";
+
+      if (leadStep === 2) {
+        var city = modal.querySelector('[name="lead_city"]');
+        if (!city.value.trim()) {
+          error.textContent = "Informe a cidade para continuar.";
+          city.focus();
+          return;
+        }
+        leadAnswers.city = city.value.trim();
+        pushEvent("whatsapp_qualification_step", { step_number: 2, lead_city: leadAnswers.city });
+        showLeadStep(3);
+        return;
+      }
+
+      var email = modal.querySelector('[name="lead_email"]');
+      var consent = modal.querySelector('[name="lead_consent"]');
+      if (!email.checkValidity()) {
+        error.textContent = "Informe um e-mail válido.";
+        email.focus();
+        return;
+      }
+      if (!consent.checked) {
+        error.textContent = "Confirme o uso dos dados para continuar.";
+        consent.focus();
+        return;
+      }
+
+      leadAnswers.email = email.value.trim().toLowerCase();
+      pushEvent("whatsapp_lead_capture", {
+        conversion_type: "enhanced_lead",
+        cta_location: pendingWhatsApp.location,
+        product_name: leadAnswers.product,
+        lead_city: leadAnswers.city,
+        user_data: { email_address: leadAnswers.email }
+      });
+      var pending = pendingWhatsApp;
+      var answers = Object.assign({}, leadAnswers);
+      closeLeadModal("completed");
+      openWhatsApp(pending.element, pending.location, answers);
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && !modal.hidden) closeLeadModal("closed");
+    });
+    return modal;
+  }
+
+  function showLeadStep(step) {
+    var modal = ensureLeadModal();
+    leadStep = step;
+    modal.querySelectorAll("[data-lead-step]").forEach(function (panel) {
+      panel.hidden = Number(panel.dataset.leadStep) !== step;
+    });
+    modal.querySelectorAll(".cro-lead-modal__progress span").forEach(function (item, index) {
+      item.classList.toggle("is-active", index < step);
+    });
+    var focusTarget = step === 1 ? modal.querySelector("[data-lead-product]") : modal.querySelector('[data-lead-step="' + step + '"] input');
+    window.setTimeout(function () { if (focusTarget) focusTarget.focus(); }, 40);
+  }
+
+  function closeLeadModal(reason) {
+    var modal = document.querySelector(".cro-lead-modal");
+    if (!modal || modal.hidden) return;
+    modal.hidden = true;
+    document.body.classList.remove("cro-lead-modal-open");
+    pushEvent("whatsapp_qualification_close", { close_reason: reason, step_number: leadStep });
+    if (leadReturnFocus && leadReturnFocus.focus) leadReturnFocus.focus();
+  }
+
+  function openLeadModal(element, location) {
+    var modal = ensureLeadModal();
+    pendingWhatsApp = { element: element, location: location };
+    leadReturnFocus = element;
+    leadAnswers = { product: "", city: "", email: "" };
+    var city = modal.querySelector('[name="lead_city"]');
+    var email = modal.querySelector('[name="lead_email"]');
+    var consent = modal.querySelector('[name="lead_consent"]');
+    city.value = "";
+    email.value = "";
+    consent.checked = false;
+    modal.querySelectorAll(".cro-lead-modal__error").forEach(function (item) { item.textContent = ""; });
+    modal.hidden = false;
+    document.body.classList.add("cro-lead-modal-open");
+    showLeadStep(1);
+    pushEvent("whatsapp_qualification_start", { cta_location: location, product_context: productContext(element) });
   }
 
   function ctaLocation(element) {
@@ -81,7 +242,7 @@
       if (!isConversionCta(target)) return;
       event.preventDefault();
       event.stopImmediatePropagation();
-      openWhatsApp(target, ctaLocation(target));
+      openLeadModal(target, ctaLocation(target));
     }, true);
   }
 
