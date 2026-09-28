@@ -1,0 +1,76 @@
+/* CRO v2 — caminhos adicionais do Hero + WhatsApp brasileiro robusto. */
+
+.cro-hero-inline-action {
+  cursor: pointer;
+  border-radius: 0.35rem;
+}
+
+.cro-hero-inline-action:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 0.3rem;
+}
+
+.product-form__field.cro-phone-field {
+  position: relative;
+}
+
+.cro-phone-field .cro-phone-input {
+  min-height: 3rem;
+  padding-left: 8.35rem !important;
+}
+
+.cro-phone-country {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 4;
+  width: 7.85rem;
+  height: 3rem;
+  padding: 0 0.55rem;
+  color: var(--text);
+  background: transparent;
+  border: 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 0;
+  font-family: var(--font-body);
+  font-size: 0.86rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cro-phone-country:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: -2px;
+}
+
+.cro-phone-country option {
+  color: #111;
+  background: #fff;
+}
+
+.cro-phone-field--invalid .cro-phone-input {
+  border-color: #e5484d !important;
+  background-color: rgba(229, 72, 77, 0.06) !important;
+  box-shadow: 0 0 0 1px rgba(229, 72, 77, 0.28) !important;
+}
+
+.cro-phone-field--invalid .cro-phone-country {
+  border-right-color: rgba(229, 72, 77, 0.55);
+}
+
+.cro-phone-error {
+  margin-top: 0.45rem !important;
+  color: #ff7b7f !important;
+}
+
+@media (max-width: 380px) {
+  .cro-phone-field .cro-phone-input {
+    padding-left: 7.75rem !important;
+  }
+
+  .cro-phone-country {
+    width: 7.25rem;
+    padding-inline: 0.4rem;
+    font-size: 0.8rem;
+  }
+}
