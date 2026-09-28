@@ -115,7 +115,20 @@
     if (!bar || bar.dataset.croTicker === VERSION) return;
     var inner = bar.querySelector(".promo-bar__inner") || bar;
     var source = inner.querySelector(".promo-bar__text");
+    var phrases = [
+      "10% de desconto para novos clientes",
+      "Entregamos na sua cidade",
+      "Técnicos inclusos"
+    ];
+    var group = phrases.map(function (phrase) {
+      return '<span class="cro-ticker__item">' + phrase + '</span><span class="cro-ticker__dot" aria-hidden="true">•</span>';
+    }).join("");
+    var ticker = document.createElement("div");
+    ticker.className = "cro-ticker";
+    ticker.setAttribute("aria-label", "10% de desconto para novos clientes. Entregamos na sua cidade. Técnicos inclusos.");
+    ticker.innerHTML = '<div class="cro-ticker__track"><span class="cro-ticker__group">' + group + '</span><span class="cro-ticker__group" aria-hidden="true">' + group + '</span></div>';
     if (source) source.classList.add("cro-ticker-source");
+    inner.appendChild(ticker);
     bar.dataset.croTicker = VERSION;
     bar.setAttribute("role", "link");
     bar.setAttribute("tabindex", "0");

@@ -561,56 +561,33 @@ body.cro-v3-ready {
 }
 
 .cro-ticker-source {
-  position: relative !important;
-  display: block !important;
-  width: 100% !important;
-  height: auto !important;
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
   overflow: hidden !important;
-  clip: auto !important;
+  clip: rect(0 0 0 0) !important;
   white-space: nowrap !important;
-  font-size: 0 !important;
-}
-
-.cro-ticker-source::after {
-  content: "10% de desconto para novos clientes   •   Entregamos na sua cidade   •   Técnicos inclusos   •";
-  display: inline-block;
-  padding: 0.72rem 0 0.72rem 100%;
-  color: #fff;
-  font-size: clamp(0.78rem, 2vw, 0.94rem);
-  font-weight: 750;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  animation: cro-ticker-source 16s linear infinite;
-  will-change: transform;
-}
-
-.promo-bar:hover .cro-ticker-source::after,
-.promo-bar:focus-visible .cro-ticker-source::after {
-  animation-play-state: paused;
-}
-
-@keyframes cro-ticker-source {
-  to { transform: translateX(-100%); }
 }
 
 .cro-ticker__track {
   display: flex;
   width: max-content;
-  min-width: 200%;
-  animation: cro-ticker 24s linear infinite;
+  animation: cro-ticker 26s linear infinite;
   will-change: transform;
 }
 
 .cro-ticker__group {
   display: inline-flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-evenly;
+  flex: 0 0 auto;
+  width: max-content;
   min-width: 100vw;
   padding: 0.72rem 1.25rem;
+  gap: clamp(1rem, 2.8vw, 2.75rem);
 }
 
 .cro-ticker__item {
-  padding-inline: 1.25rem;
   font-size: clamp(0.78rem, 2vw, 0.94rem);
   font-weight: 750;
   letter-spacing: 0.02em;
@@ -619,8 +596,9 @@ body.cro-v3-ready {
 
 .cro-ticker__dot {
   color: var(--cro-yellow);
-  font-size: 1.35rem;
-  line-height: 0;
+  font-size: 1.15rem;
+  line-height: 1;
+  flex: 0 0 auto;
 }
 
 .promo-bar:hover .cro-ticker__track,
@@ -936,8 +914,8 @@ body.cro-v3-ready {
 .cro-phone-error { margin-top: 0.45rem !important; color: #a11919 !important; }
 
 @media (max-width: 700px) {
-  .cro-ticker__group { min-width: max-content; }
-  .cro-ticker__item { padding-inline: 1rem; }
+  .cro-ticker__track { animation-duration: 22s; }
+  .cro-ticker__group { padding-inline: 1rem; gap: 1.15rem; }
   .cro-v3-ready .home-hero__title { min-height: 4.2em; }
   .cro-whatsapp-float { padding: 0.38rem; }
   .cro-whatsapp-float span { display: none; }
@@ -952,7 +930,6 @@ body.cro-v3-ready {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .cro-ticker__track { animation: none; transform: none; }
-  .cro-ticker-source::after { animation: none; transform: none; padding-left: 0; }
   .cro-ticker__group[aria-hidden="true"] { display: none; }
   .cro-headline,
   .cro-reveal,
