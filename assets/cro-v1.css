@@ -469,3 +469,402 @@
   flex: 0 0 auto;
   object-fit: contain;
 }
+
+/* CRO v3 — experiência clara, conversão principal pelo WhatsApp e movimento leve. */
+:root {
+  --cro-ink: #161616;
+  --cro-muted: #5f6268;
+  --cro-surface: #ffffff;
+  --cro-soft: #f5f6f7;
+  --cro-yellow: #f5c400;
+  --cro-yellow-dark: #d6a900;
+  --cro-whatsapp: #16a34a;
+  --cro-whatsapp-dark: #11813b;
+  --cro-shadow: 0 18px 50px rgba(20, 20, 20, 0.09);
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--cro-surface);
+}
+
+body.cro-v3-ready,
+.cro-v3-ready #root,
+.cro-v3-ready .layout,
+.cro-v3-ready main,
+.cro-v3-ready .home {
+  color: var(--cro-ink);
+  background: var(--cro-surface);
+}
+
+body.cro-v3-ready {
+  padding-bottom: 0 !important;
+}
+
+.cro-v3-ready .site-header,
+.cro-v3-ready .header {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-bottom: 1px solid rgba(22, 22, 22, 0.08) !important;
+  box-shadow: 0 8px 30px rgba(20, 20, 20, 0.05);
+  backdrop-filter: blur(12px);
+}
+
+.cro-v3-ready .site-header img[alt*="Top"],
+.cro-v3-ready .site-header__logo img,
+.cro-v3-ready .header__logo img,
+.cro-v3-ready .header .logo-image {
+  filter: invert(1);
+}
+
+.cro-v3-ready .site-header a,
+.cro-v3-ready .site-header button,
+.cro-v3-ready .header a,
+.cro-v3-ready .header button {
+  color: var(--cro-ink);
+}
+
+.cro-v3-ready .header a.active,
+.cro-v3-ready .site-header a.active {
+  color: #fff !important;
+  background: var(--cro-ink) !important;
+}
+
+.cro-v3-ready .cro-hero-image-action,
+.cro-v3-ready .cro-product-image-action {
+  color: transparent !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.cro-v3-ready .promo-bar {
+  position: relative;
+  z-index: 20;
+  overflow: hidden;
+  padding: 0 !important;
+  color: #fff;
+  background: #151515 !important;
+  border: 0 !important;
+  cursor: pointer;
+}
+
+.cro-v3-ready .promo-bar__inner {
+  width: 100%;
+  max-width: none !important;
+  padding: 0 !important;
+}
+
+.cro-ticker {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.cro-ticker__track {
+  display: flex;
+  width: max-content;
+  min-width: 200%;
+  animation: cro-ticker 24s linear infinite;
+  will-change: transform;
+}
+
+.cro-ticker__group {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-around;
+  min-width: 100vw;
+  padding: 0.72rem 1.25rem;
+}
+
+.cro-ticker__item {
+  padding-inline: 1.25rem;
+  font-size: clamp(0.78rem, 2vw, 0.94rem);
+  font-weight: 750;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.cro-ticker__dot {
+  color: var(--cro-yellow);
+  font-size: 1.35rem;
+  line-height: 0;
+}
+
+.promo-bar:hover .cro-ticker__track,
+.promo-bar:focus-visible .cro-ticker__track {
+  animation-play-state: paused;
+}
+
+@keyframes cro-ticker {
+  to { transform: translateX(-50%); }
+}
+
+.cro-v3-ready .home {
+  display: flex;
+  flex-direction: column;
+}
+
+.cro-v3-ready .home > .home-hero { order: 1; }
+.cro-v3-ready .home > .product-selection { order: 2; }
+.cro-v3-ready .home > #product-form { order: 3; }
+.cro-v3-ready .home > .social-proof-section { order: 4; }
+.cro-v3-ready .home > .value-section { order: 5; }
+.cro-v3-ready .home > .differentials-section { order: 6; }
+.cro-v3-ready .home > .benefits-section { order: 7; }
+.cro-v3-ready .home > .product-faq { order: 8; }
+.cro-v3-ready .home > .home-seo { order: 9; }
+.cro-v3-ready .cro-trust { display: none !important; }
+
+.cro-v3-ready .home-hero,
+.cro-v3-ready .product-hero {
+  color: var(--cro-ink) !important;
+  background:
+    radial-gradient(circle at 88% 12%, rgba(245, 196, 0, 0.22), transparent 30rem),
+    linear-gradient(180deg, #fff 0%, #f7f7f5 100%) !important;
+}
+
+.cro-v3-ready .home-hero__title,
+.cro-v3-ready .product-hero__title,
+.cro-v3-ready h1,
+.cro-v3-ready h2,
+.cro-v3-ready h3 {
+  color: var(--cro-ink) !important;
+}
+
+.cro-v3-ready .home-hero__description,
+.cro-v3-ready .product-hero__description,
+.cro-v3-ready section p {
+  color: var(--cro-muted);
+}
+
+.cro-v3-ready .product-hero__trust-item {
+  color: var(--cro-muted) !important;
+}
+
+.cro-v3-ready .product-hero__trust-icon {
+  color: #8a6800 !important;
+  background: rgba(245, 196, 0, 0.18) !important;
+}
+
+.cro-v3-ready .home-hero__title {
+  display: grid;
+  align-items: center;
+  min-height: 3.3em;
+  cursor: default !important;
+}
+
+.cro-headline {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 240ms ease, transform 240ms ease;
+}
+
+.cro-headline.is-changing {
+  opacity: 0;
+  transform: translateY(0.35em);
+}
+
+.cro-v3-ready .home-hero__image-container {
+  border-radius: 1.35rem;
+  box-shadow: var(--cro-shadow);
+  transform: rotate(0.5deg);
+  transition: transform 350ms ease, box-shadow 350ms ease;
+}
+
+.cro-v3-ready .home-hero__image-container:hover {
+  transform: translateY(-5px) rotate(0deg);
+  box-shadow: 0 24px 70px rgba(20, 20, 20, 0.14);
+}
+
+.cro-v3-ready .home-hero__image {
+  border-radius: 1.35rem;
+}
+
+.cro-v3-ready section:not(.home-hero):not(.promo-bar) {
+  color: var(--cro-ink);
+  background-color: var(--cro-surface);
+}
+
+.cro-v3-ready .product-card,
+.cro-v3-ready .application-card,
+.cro-v3-ready .benefit-card,
+.cro-v3-ready .differential-card,
+.cro-v3-ready .value-card,
+.cro-v3-ready .product-form__card {
+  color: var(--cro-ink) !important;
+  background: #fff !important;
+  border: 1px solid rgba(22, 22, 22, 0.09) !important;
+  box-shadow: var(--cro-shadow) !important;
+  transition: transform 260ms ease, box-shadow 260ms ease, border-color 260ms ease;
+}
+
+.cro-v3-ready .product-card:hover,
+.cro-v3-ready .application-card:hover,
+.cro-v3-ready .benefit-card:hover,
+.cro-v3-ready .differential-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(245, 196, 0, 0.65) !important;
+  box-shadow: 0 22px 56px rgba(20, 20, 20, 0.13) !important;
+}
+
+.cro-v3-ready .btn-primary,
+.cro-v3-ready .cro-whatsapp-primary {
+  color: #fff !important;
+  background: var(--cro-whatsapp) !important;
+  border-color: var(--cro-whatsapp) !important;
+  box-shadow: 0 12px 28px rgba(22, 163, 74, 0.25) !important;
+}
+
+.cro-v3-ready .btn-primary:hover,
+.cro-v3-ready .cro-whatsapp-primary:hover {
+  color: #fff !important;
+  background: var(--cro-whatsapp-dark) !important;
+  border-color: var(--cro-whatsapp-dark) !important;
+  transform: translateY(-2px);
+}
+
+.cro-v3-ready .btn-secondary {
+  color: var(--cro-ink) !important;
+  background: transparent !important;
+  border-color: rgba(22, 22, 22, 0.25) !important;
+}
+
+.cro-v3-ready .cro-secondary-conversion {
+  background: var(--cro-soft) !important;
+  border-block: 1px solid rgba(22, 22, 22, 0.07);
+}
+
+.cro-v3-ready .cro-secondary-conversion::before {
+  content: "Alternativa ao WhatsApp";
+  display: block;
+  width: max-content;
+  margin: 0 auto 0.85rem;
+  padding: 0.35rem 0.7rem;
+  color: #725900;
+  background: rgba(245, 196, 0, 0.22);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.cro-v3-ready .product-form__input,
+.cro-v3-ready .product-form__select,
+.cro-v3-ready .product-form__textarea {
+  color: var(--cro-ink) !important;
+  background: #fff !important;
+  border-color: rgba(22, 22, 22, 0.2) !important;
+}
+
+.cro-v3-ready .product-form__input:focus,
+.cro-v3-ready .product-form__select:focus,
+.cro-v3-ready .product-form__textarea:focus {
+  border-color: var(--cro-yellow-dark) !important;
+  box-shadow: 0 0 0 3px rgba(245, 196, 0, 0.18) !important;
+}
+
+.cro-whatsapp-float {
+  position: fixed;
+  right: clamp(1rem, 3vw, 2rem);
+  bottom: clamp(1rem, 3vw, 2rem);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.45rem 0.85rem 0.45rem 0.45rem;
+  color: #fff !important;
+  background: #16a34a;
+  border: 2px solid #fff;
+  border-radius: 999px;
+  box-shadow: 0 14px 38px rgba(22, 163, 74, 0.38);
+  font-size: 0.88rem;
+  font-weight: 800;
+  text-decoration: none;
+  transition: transform 220ms ease, box-shadow 220ms ease;
+}
+
+.cro-whatsapp-float img {
+  width: 3rem;
+  height: 3rem;
+  object-fit: contain;
+}
+
+.cro-whatsapp-float:hover {
+  color: #fff;
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 19px 46px rgba(22, 163, 74, 0.45);
+}
+
+.cro-whatsapp-float:focus-visible,
+.cro-v3-ready a:focus-visible,
+.cro-v3-ready button:focus-visible {
+  outline: 3px solid var(--cro-yellow);
+  outline-offset: 3px;
+}
+
+.cro-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 560ms ease, transform 560ms ease;
+}
+
+.cro-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cro-v3-ready main > section:nth-of-type(n + 4) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 760px;
+}
+
+/* Integração do campo internacional, sem uma segunda folha bloqueante. */
+.product-form__field.cro-phone-field { position: relative; }
+.cro-phone-field .cro-phone-input { min-height: 3rem; padding-left: 8.35rem !important; }
+.cro-phone-country {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 4;
+  width: 7.85rem;
+  height: 3rem;
+  padding: 0 0.55rem;
+  color: var(--cro-ink);
+  background: transparent;
+  border: 0;
+  border-right: 1px solid rgba(22, 22, 22, 0.15);
+  font-size: 0.86rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+.cro-phone-country:focus-visible { outline: 2px solid var(--cro-yellow-dark); outline-offset: -2px; }
+.cro-phone-country option { color: #111; background: #fff; }
+.cro-phone-field--invalid .cro-phone-input { border-color: #c62828 !important; background-color: rgba(198, 40, 40, 0.04) !important; }
+.cro-phone-field--invalid .cro-phone-country { border-right-color: rgba(198, 40, 40, 0.55); }
+.cro-phone-error { margin-top: 0.45rem !important; color: #a11919 !important; }
+
+@media (max-width: 700px) {
+  .cro-ticker__group { min-width: max-content; }
+  .cro-ticker__item { padding-inline: 1rem; }
+  .cro-v3-ready .home-hero__title { min-height: 4.2em; }
+  .cro-whatsapp-float { padding: 0.38rem; }
+  .cro-whatsapp-float span { display: none; }
+  .cro-whatsapp-float img { width: 3.2rem; height: 3.2rem; }
+}
+
+@media (max-width: 380px) {
+  .cro-phone-field .cro-phone-input { padding-left: 7.75rem !important; }
+  .cro-phone-country { width: 7.25rem; padding-inline: 0.4rem; font-size: 0.8rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .cro-ticker__track { animation: none; transform: none; }
+  .cro-ticker__group[aria-hidden="true"] { display: none; }
+  .cro-headline,
+  .cro-reveal,
+  .cro-v3-ready .product-card,
+  .cro-whatsapp-float { transition: none !important; transform: none !important; }
+}

@@ -108,50 +108,8 @@
   function reorderHome() {
     var home = document.querySelector(".home");
     if (!home || home.dataset.croOrder === CRO_VERSION) return;
-
-    var hero = home.querySelector(".home-hero");
-    var value = home.querySelector(".value-section");
-    var seo = home.querySelector(".home-seo");
-    var products = home.querySelector("#produtos");
-    var differentials = home.querySelector(".differentials-section");
-    var benefits = home.querySelector(".benefits-section");
-    var social = home.querySelector(".social-proof-section");
-    var faq = home.querySelector(".product-faq");
-    var form = home.querySelector("#product-form");
-
-    if (
-      !hero ||
-      !value ||
-      !seo ||
-      !products ||
-      !differentials ||
-      !benefits ||
-      !social ||
-      !faq ||
-      !form
-    ) {
-      return;
-    }
-
-    var trust = home.querySelector(".cro-trust") || buildTrustStrip();
-    var orderedSections = [
-      trust,
-      products,
-      form,
-      social,
-      value,
-      differentials,
-      benefits,
-      faq,
-      seo,
-    ];
-    var cursor = hero;
-
-    orderedSections.forEach(function (section) {
-      cursor.insertAdjacentElement("afterend", section);
-      cursor = section;
-    });
-
+    // A ordem visual agora é definida no CSS antes da primeira pintura.
+    // Mover seções depois do carregamento era a origem do CLS elevado.
     home.dataset.croOrder = CRO_VERSION;
     home.classList.add("home--cro-v1");
   }
@@ -397,42 +355,9 @@
 
   function addStickyCta() {
     var existing = document.querySelector(".cro-sticky-cta");
-    var shouldShow = window.location.pathname !== "/obrigado" && !!getForm();
-
-    if (!shouldShow) {
-      if (existing) existing.remove();
-      document.body.classList.remove("cro-has-sticky-cta");
-      if (formVisibilityObserver) formVisibilityObserver.disconnect();
-      return;
-    }
-
-    var button = existing;
-    if (!button) {
-      button = document.createElement("button");
-      button.type = "button";
-      button.className = "cro-sticky-cta";
-      button.textContent = "Solicitar orçamento";
-      button.setAttribute("aria-label", "Ir para o formulário de orçamento");
-      button.addEventListener("click", function () {
-        pushEvent("cro_cta_click", { cta_location: "sticky_mobile", cta_type: "primary" });
-        scrollToElement(getForm());
-      });
-      document.body.appendChild(button);
-    }
-    document.body.classList.add("cro-has-sticky-cta");
-
-    if (button.dataset.observedForm === window.location.pathname) return;
-    button.dataset.observedForm = window.location.pathname;
+    if (existing) existing.remove();
+    document.body.classList.remove("cro-has-sticky-cta");
     if (formVisibilityObserver) formVisibilityObserver.disconnect();
-    formVisibilityObserver = new IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (entry) {
-          button.classList.toggle("is-hidden", entry.isIntersecting);
-        });
-      },
-      { threshold: 0.12 }
-    );
-    formVisibilityObserver.observe(getForm());
   }
 
   function standardizeWhatsAppNumber() {

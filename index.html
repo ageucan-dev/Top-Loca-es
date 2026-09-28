@@ -4,10 +4,31 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/webp" href="/assets/LogoTopLoc-DC7t7Ki1.webp" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://locacoestop.com.br/" />
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+    <link rel="preconnect" href="https://www.google-analytics.com" crossorigin />
+    <link
+      rel="preload"
+      as="image"
+      href="/assets/ImgHero-420.webp"
+      imagesrcset="/assets/ImgHero-420.webp 420w, /assets/ImgHero-720.webp 720w"
+      imagesizes="(max-width: 480px) calc(100vw - 48px), (max-width: 900px) 520px, 543px"
+      fetchpriority="high"
+    />
     <meta
       name="description"
       content="Locação de balancins elétricos e manuais em Ribeirão Preto e região para obras, fachadas e manutenção predial."
     />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content="Top Locações" />
+    <meta property="og:title" content="Locação de balancins em Ribeirão Preto | Top Locações" />
+    <meta property="og:description" content="Balancins elétricos e manuais para obras, fachadas e manutenção predial em Ribeirão Preto e região." />
+    <meta property="og:url" content="https://locacoestop.com.br/" />
+    <meta property="og:image" content="https://locacoestop.com.br/assets/ImgHero-D3pEis8C.webp" />
+    <meta name="twitter:card" content="summary_large_image" />
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-61HWDM25QB"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -23,11 +44,60 @@
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-PNSR7W84');
     </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "LocalBusiness",
+            "@id": "https://locacoestop.com.br/#empresa",
+            "name": "Top Locações",
+            "url": "https://locacoestop.com.br/",
+            "telephone": "+55 16 99263-1992",
+            "email": "toplocacoes17@gmail.com",
+            "image": "https://locacoestop.com.br/assets/ImgHero-D3pEis8C.webp",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Rua Dr. Julio Dante Risso, 557, Jardim Anhanguera",
+              "addressLocality": "Ribeirão Preto",
+              "addressRegion": "SP",
+              "postalCode": "14092-190",
+              "addressCountry": "BR"
+            },
+            "openingHoursSpecification": {
+              "@type": "OpeningHoursSpecification",
+              "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+              "opens": "09:00",
+              "closes": "17:00"
+            },
+            "areaServed": [
+              {"@type": "City", "name": "Ribeirão Preto"},
+              {"@type": "AdministrativeArea", "name": "Região de Ribeirão Preto"}
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://locacoestop.com.br/#website",
+            "url": "https://locacoestop.com.br/",
+            "name": "Top Locações",
+            "inLanguage": "pt-BR",
+            "publisher": {"@id": "https://locacoestop.com.br/#empresa"}
+          },
+          {
+            "@type": "Service",
+            "@id": "https://locacoestop.com.br/#locacao-balancins",
+            "name": "Locação de balancins elétricos e manuais",
+            "serviceType": "Locação de balancins para obras, fachadas e manutenção predial",
+            "provider": {"@id": "https://locacoestop.com.br/#empresa"},
+            "areaServed": "Ribeirão Preto e região"
+          }
+        ]
+      }
+    </script>
     <title>Locação de balancins em Ribeirão Preto | Top Locações</title>
     <script type="module" crossorigin src="/assets/index-dGniKDdy.js"></script>
     <link rel="stylesheet" crossorigin href="/assets/index-BU0bQZ1c.css">
     <link rel="stylesheet" href="/assets/cro-v1.css">
-    <link rel="stylesheet" href="/assets/cro-phone-v2.css">
   </head>
   <body>
     <noscript>
@@ -41,5 +111,6 @@
     <div id="root"></div>
     <script defer src="/assets/cro-v1.js"></script>
     <script defer src="/assets/cro-phone-v2.js"></script>
+    <script defer src="/assets/cro-v3.js"></script>
   </body>
 </html>
