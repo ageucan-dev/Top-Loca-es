@@ -85,20 +85,37 @@
     }, true);
   }
 
+  /*
+   * Os complementos de conversão enriquecem nós renderizados pelo React.
+   * Uma navegação completa evita que o reconciliador tente desmontar uma
+   * árvore que recebeu atributos externos entre duas rotas da SPA.
+   */
+  function stabilizeInternalNavigation() {
+    if (document.documentElement.dataset.croStableNavigation === VERSION) return;
+    document.documentElement.dataset.croStableNavigation = VERSION;
+    document.addEventListener("click", function (event) {
+      var link = event.target.closest("a[href]");
+      if (!link || link.target === "_blank" || link.hasAttribute("download")) return;
+      var url;
+      try {
+        url = new URL(link.href, window.location.href);
+      } catch (error) {
+        return;
+      }
+      if (url.origin !== window.location.origin || url.hash && url.pathname === window.location.pathname) return;
+      if (!["/", "/balancim-eletrico", "/balancim-manual", "/obrigado"].includes(url.pathname)) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      window.location.assign(url.href);
+    }, true);
+  }
+
   function enhancePromo() {
     var bar = document.querySelector(".promo-bar");
     if (!bar || bar.dataset.croTicker === VERSION) return;
     var inner = bar.querySelector(".promo-bar__inner") || bar;
-    var phrases = [
-      "10% de desconto para novos clientes",
-      "Entregamos na sua cidade",
-      "Técnicos inclusos"
-    ];
-    var group = phrases.map(function (phrase) {
-      return '<span class="cro-ticker__item">' + phrase + '</span><span class="cro-ticker__dot" aria-hidden="true">•</span>';
-    }).join("");
-    inner.innerHTML = '<div class="cro-ticker" aria-label="10% de desconto para novos clientes. Entregamos na sua cidade. Técnicos inclusos.">' +
-      '<div class="cro-ticker__track"><span class="cro-ticker__group">' + group + '</span><span class="cro-ticker__group" aria-hidden="true">' + group + '</span></div></div>';
+    var source = inner.querySelector(".promo-bar__text");
+    if (source) source.classList.add("cro-ticker-source");
     bar.dataset.croTicker = VERSION;
     bar.setAttribute("role", "link");
     bar.setAttribute("tabindex", "0");
@@ -121,20 +138,20 @@
     title.removeAttribute("role");
     title.removeAttribute("tabindex");
     title.classList.remove("cro-hero-title-action");
-    title.innerHTML = '<span class="cro-sr-only">' + phrases[0] + '</span><span class="cro-headline" aria-hidden="true"></span>';
-    var visual = title.querySelector(".cro-headline");
     var index = 0;
-    visual.textContent = phrases[index];
+    title.classList.add("cro-headline-rotator");
+    title.dataset.croHeadline = phrases[index];
+    title.removeAttribute("aria-label");
     title.dataset.croRotation = VERSION;
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     window.setInterval(function () {
       if (!document.body.contains(title)) return;
-      visual.classList.add("is-changing");
+      title.classList.add("is-changing");
       window.setTimeout(function () {
         index = (index + 1) % phrases.length;
-        visual.textContent = phrases[index];
-        visual.classList.remove("is-changing");
+        title.dataset.croHeadline = phrases[index];
+        title.classList.remove("is-changing");
       }, 240);
     }, ROTATION_MS);
   }
@@ -143,14 +160,13 @@
     document.querySelectorAll("a, button").forEach(function (element) {
       if (!isConversionCta(element) || element.closest("#product-form")) return;
       if (element.matches(".cro-hero-image-action, .cro-product-image-action")) {
-        element.textContent = "";
         element.setAttribute("aria-label", "Falar com a Top Locações no WhatsApp");
         return;
       }
       element.classList.add("cro-whatsapp-primary");
       var text = (element.textContent || "").trim().toLowerCase();
       if (/solicitar orçamento|entrar em contato|pedir orçamento/.test(text)) {
-        element.textContent = "Falar no WhatsApp";
+        element.classList.add("cro-cta-relabel");
       }
       if (element.tagName === "A") {
         element.href = whatsAppUrl(element);
@@ -158,6 +174,24 @@
         element.rel = "noopener noreferrer";
       }
       element.setAttribute("aria-label", "Falar com a Top Locações no WhatsApp");
+    });
+
+    document.querySelectorAll("#produtos .product-card").forEach(function (card) {
+      var image = card.querySelector(".product-card__image-wrapper");
+      var details = card.querySelector(".product-card__footer a");
+      if (image) {
+        image.classList.add("cro-product-image-action");
+        image.setAttribute("role", "button");
+        image.setAttribute("tabindex", "0");
+        image.setAttribute("aria-label", "Falar com a Top Locações no WhatsApp");
+      }
+      if (details) {
+        details.classList.add("cro-whatsapp-primary", "cro-cta-relabel");
+        details.href = whatsAppUrl(details);
+        details.target = "_blank";
+        details.rel = "noopener noreferrer";
+        details.setAttribute("aria-label", "Falar com a Top Locações no WhatsApp");
+      }
     });
   }
 
@@ -178,10 +212,6 @@
     if (!section || section.dataset.croSecondary === VERSION) return;
     section.dataset.croSecondary = VERSION;
     section.classList.add("cro-secondary-conversion");
-    var heading = section.querySelector("h2");
-    if (heading) heading.textContent = "Prefere receber nosso contato?";
-    var intro = section.querySelector("p");
-    if (intro) intro.textContent = "Preencha o formulário e nossa equipe retornará. Para atendimento imediato, use o WhatsApp.";
   }
 
   function optimizeHeroImage() {
@@ -198,7 +228,6 @@
   function standardizeContact() {
     document.querySelectorAll('a[href*="wa.me"]').forEach(function (link) {
       link.href = whatsAppUrl(link);
-      if ((link.textContent || "").match(/\(16\).*\d{4}-\d{4}/)) link.textContent = PHONE_DISPLAY;
     });
   }
 
@@ -258,19 +287,6 @@
     targets.forEach(function (target) { observer.observe(target); });
   }
 
-  function normalizeHeadingOrder() {
-    document.querySelectorAll(".social-proof-section h4").forEach(function (heading) {
-      if (heading.dataset.croHeading === VERSION) return;
-      var replacement = document.createElement("h3");
-      Array.prototype.slice.call(heading.attributes).forEach(function (attribute) {
-        replacement.setAttribute(attribute.name, attribute.value);
-      });
-      replacement.dataset.croHeading = VERSION;
-      replacement.innerHTML = heading.innerHTML;
-      heading.replaceWith(replacement);
-    });
-  }
-
   function enhance() {
     scheduled = false;
     enhancePromo();
@@ -281,7 +297,6 @@
     optimizeHeroImage();
     standardizeContact();
     optimizeMetadata();
-    normalizeHeadingOrder();
     addRevealEffects();
     document.body.classList.add("cro-v3-ready");
   }
@@ -293,6 +308,7 @@
   }
 
   routeConversions();
+  stabilizeInternalNavigation();
   var root = document.querySelector("#root");
   if (root) new MutationObserver(schedule).observe(root, { childList: true, subtree: true });
   window.addEventListener("pageshow", schedule);

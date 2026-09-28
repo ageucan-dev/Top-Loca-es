@@ -560,6 +560,39 @@ body.cro-v3-ready {
   white-space: nowrap;
 }
 
+.cro-ticker-source {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  overflow: hidden !important;
+  clip: auto !important;
+  white-space: nowrap !important;
+  font-size: 0 !important;
+}
+
+.cro-ticker-source::after {
+  content: "10% de desconto para novos clientes   •   Entregamos na sua cidade   •   Técnicos inclusos   •";
+  display: inline-block;
+  padding: 0.72rem 0 0.72rem 100%;
+  color: #fff;
+  font-size: clamp(0.78rem, 2vw, 0.94rem);
+  font-weight: 750;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  animation: cro-ticker-source 16s linear infinite;
+  will-change: transform;
+}
+
+.promo-bar:hover .cro-ticker-source::after,
+.promo-bar:focus-visible .cro-ticker-source::after {
+  animation-play-state: paused;
+}
+
+@keyframes cro-ticker-source {
+  to { transform: translateX(-100%); }
+}
+
 .cro-ticker__track {
   display: flex;
   width: max-content;
@@ -653,6 +686,28 @@ body.cro-v3-ready {
   cursor: default !important;
 }
 
+.cro-v3-ready .home-hero__title.cro-headline-rotator {
+  position: relative;
+  color: transparent !important;
+}
+
+.cro-v3-ready .home-hero__title.cro-headline-rotator::after {
+  content: attr(data-cro-headline);
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-items: center;
+  color: var(--cro-ink);
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 240ms ease, transform 240ms ease;
+}
+
+.cro-v3-ready .home-hero__title.cro-headline-rotator.is-changing::after {
+  opacity: 0;
+  transform: translateY(0.35em);
+}
+
 .cro-headline {
   display: block;
   opacity: 1;
@@ -663,6 +718,17 @@ body.cro-v3-ready {
 .cro-headline.is-changing {
   opacity: 0;
   transform: translateY(0.35em);
+}
+
+.cro-v3-ready .cro-cta-relabel {
+  font-size: 0 !important;
+}
+
+.cro-v3-ready .cro-cta-relabel::after {
+  content: "Falar no WhatsApp";
+  font-size: 0.95rem;
+  line-height: 1.2;
+  letter-spacing: 0;
 }
 
 .cro-v3-ready .home-hero__image-container {
@@ -823,6 +889,30 @@ body.cro-v3-ready {
 /* Integração do campo internacional, sem uma segunda folha bloqueante. */
 .product-form__field.cro-phone-field { position: relative; }
 .cro-phone-field .cro-phone-input { min-height: 3rem; padding-left: 8.35rem !important; }
+.cro-phone-field::before {
+  content: attr(data-cro-phone-prefix);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  width: 7.85rem;
+  height: 3rem;
+  padding: 0 0.55rem;
+  color: var(--cro-ink);
+  border-right: 1px solid rgba(22, 22, 22, 0.15);
+  font-size: 0.86rem;
+  font-weight: 650;
+  pointer-events: none;
+}
+.cro-phone-field--invalid::after {
+  content: "Informe um WhatsApp válido com DDD.";
+  display: block;
+  margin-top: 0.45rem;
+  color: #a11919;
+  font-size: 0.85rem;
+}
 .cro-phone-country {
   position: absolute;
   top: 0;
@@ -862,9 +952,383 @@ body.cro-v3-ready {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .cro-ticker__track { animation: none; transform: none; }
+  .cro-ticker-source::after { animation: none; transform: none; padding-left: 0; }
   .cro-ticker__group[aria-hidden="true"] { display: none; }
   .cro-headline,
   .cro-reveal,
   .cro-v3-ready .product-card,
   .cro-whatsapp-float { transition: none !important; transform: none !important; }
+}
+
+/* CRO v4 — consolidação do tema claro e contraste de todos os conteúdos. */
+body.cro-v3-ready {
+  --bg: #ffffff;
+  --bg-alt: #f5f6f7;
+  --surface: #ffffff;
+  --text: #161616;
+  --text-secondary: #5f6268;
+  --text-muted: #74777d;
+}
+
+.cro-v3-ready .value-accordion__item {
+  border-color: rgba(22, 22, 22, 0.12) !important;
+}
+
+.cro-v3-ready .value-accordion__item:first-child {
+  border-top-color: rgba(22, 22, 22, 0.12) !important;
+}
+
+.cro-v3-ready .value-accordion__trigger:hover {
+  background: rgba(245, 196, 0, 0.08) !important;
+}
+
+.cro-v3-ready .value-accordion__title,
+.cro-v3-ready .feature-item__text,
+.cro-v3-ready .application-card__title {
+  color: var(--cro-ink) !important;
+}
+
+.cro-v3-ready .value-accordion__description,
+.cro-v3-ready .application-card__description {
+  color: var(--cro-muted) !important;
+}
+
+.cro-v3-ready .value-accordion__trigger.cro-whatsapp-primary .value-accordion__title {
+  color: #fff !important;
+}
+
+.cro-v3-ready .differential-item {
+  color: var(--cro-ink) !important;
+  background: #fff !important;
+  border: 1px solid rgba(22, 22, 22, 0.09) !important;
+  box-shadow: 0 16px 38px rgba(20, 20, 20, 0.08) !important;
+}
+
+.cro-v3-ready .differential-item:hover {
+  border-color: rgba(245, 196, 0, 0.7) !important;
+  box-shadow: 0 20px 46px rgba(20, 20, 20, 0.12) !important;
+}
+
+.cro-v3-ready .differential-item__title {
+  color: var(--cro-ink) !important;
+}
+
+.cro-v3-ready .differential-item__description {
+  color: var(--cro-muted) !important;
+}
+
+.cro-v3-ready .home-seo {
+  color: var(--cro-ink) !important;
+  background:
+    radial-gradient(circle at 92% 15%, rgba(245, 196, 0, 0.14), transparent 24rem),
+    #fff !important;
+  border-top: 1px solid rgba(22, 22, 22, 0.07);
+}
+
+.cro-v3-ready .home-seo::before {
+  opacity: 0 !important;
+}
+
+.cro-v3-ready .home-seo__eyebrow {
+  color: #785d00 !important;
+}
+
+.cro-v3-ready .home-seo__text p {
+  color: var(--cro-muted) !important;
+}
+
+.cro-v3-ready .home-seo__link {
+  color: var(--cro-ink) !important;
+  background: #fff !important;
+  border: 1px solid rgba(22, 22, 22, 0.14) !important;
+  border-radius: 0.8rem;
+  box-shadow: 0 8px 24px rgba(20, 20, 20, 0.06);
+}
+
+.cro-v3-ready .home-seo__link:hover {
+  color: var(--cro-ink) !important;
+  border-color: var(--cro-yellow-dark) !important;
+  background: rgba(245, 196, 0, 0.08) !important;
+}
+
+.cro-v3-ready .testimonial-card-main {
+  color: var(--cro-ink) !important;
+  background: linear-gradient(145deg, #fff, #faf9f4) !important;
+  border: 1px solid rgba(22, 22, 22, 0.1) !important;
+  box-shadow: 0 18px 46px rgba(20, 20, 20, 0.1) !important;
+}
+
+.cro-v3-ready .testimonial-author__name,
+.cro-v3-ready .testimonial-card-main__text {
+  color: var(--cro-ink) !important;
+}
+
+.cro-v3-ready .testimonial-author__reviews,
+.cro-v3-ready .testimonial-author__date,
+.cro-v3-ready .testimonial-verified-text {
+  color: var(--cro-muted) !important;
+}
+
+.cro-v3-ready .testimonial-card-main__divider {
+  background: rgba(22, 22, 22, 0.1) !important;
+}
+
+.cro-v3-ready .product-seo-details {
+  color: var(--cro-ink) !important;
+  background:
+    radial-gradient(circle at 92% 8%, rgba(245, 196, 0, 0.12), transparent 26rem),
+    #fff !important;
+}
+
+.cro-v3-ready .product-seo-details::before {
+  opacity: 0.22 !important;
+  background-image:
+    linear-gradient(rgba(22, 22, 22, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(22, 22, 22, 0.04) 1px, transparent 1px) !important;
+}
+
+.cro-v3-ready .product-seo-details__group,
+.cro-v3-ready .product-seo-details__group--application,
+.cro-v3-ready .product-seo-details__group--capacity,
+.cro-v3-ready .product-seo-details__group--differentials,
+.cro-v3-ready .product-seo-details__group--included,
+.cro-v3-ready .product-seo-details__group--excluded,
+.cro-v3-ready .product-seo-details__group--conditions {
+  color: var(--cro-ink) !important;
+  background: rgba(255, 255, 255, 0.96) !important;
+  border: 1px solid rgba(22, 22, 22, 0.09) !important;
+  box-shadow: 0 16px 40px rgba(20, 20, 20, 0.08) !important;
+}
+
+.cro-v3-ready .product-seo-details__group:hover {
+  border-color: rgba(245, 196, 0, 0.7) !important;
+  box-shadow: 0 21px 48px rgba(20, 20, 20, 0.12) !important;
+}
+
+.cro-v3-ready .product-seo-details__group-title {
+  color: var(--cro-ink) !important;
+}
+
+.cro-v3-ready .product-seo-details__list {
+  color: var(--cro-muted) !important;
+}
+
+/* Estes dois blocos permanecem escuros por decisão visual. */
+.cro-v3-ready .benefits-list {
+  color: #fff !important;
+  background: linear-gradient(135deg, #292929, #1c1c1c) !important;
+  border: 1px solid rgba(245, 196, 0, 0.18) !important;
+  box-shadow: 0 18px 42px rgba(20, 20, 20, 0.18) !important;
+}
+
+.cro-v3-ready .benefit-item,
+.cro-v3-ready .benefit-item__text {
+  color: #fff !important;
+}
+
+.cro-v3-ready .benefit-item__icon {
+  color: var(--cro-yellow) !important;
+}
+
+.cro-v3-ready .faq-item {
+  color: #fff !important;
+  background: #242424 !important;
+  border: 1px solid rgba(245, 196, 0, 0.15) !important;
+  box-shadow: 0 8px 22px rgba(20, 20, 20, 0.1);
+}
+
+.cro-v3-ready .faq-question,
+.cro-v3-ready .faq-question__text {
+  color: #fff !important;
+}
+
+.cro-v3-ready .faq-question:hover,
+.cro-v3-ready .faq-question:focus-visible,
+.cro-v3-ready .faq-question.active {
+  color: #fff !important;
+  background: #303030 !important;
+}
+
+.cro-v3-ready .faq-question.active {
+  border-bottom-color: rgba(245, 196, 0, 0.18) !important;
+}
+
+.cro-v3-ready .faq-answer p {
+  color: #d6d6d6 !important;
+}
+
+/* Rodapé claro, compacto e consistente com os cartões do site. */
+.cro-v3-ready .site-footer {
+  min-height: 0;
+  padding-top: clamp(2.5rem, 6vw, 4.5rem);
+  color: var(--cro-ink) !important;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(245, 196, 0, 0.13), transparent 25rem),
+    #f5f6f7 !important;
+  border-top: 1px solid rgba(22, 22, 22, 0.08) !important;
+}
+
+.cro-v3-ready .site-footer__content {
+  grid-template-columns: 1fr;
+  gap: 1.75rem;
+  width: min(1180px, calc(100% - 2rem));
+}
+
+.cro-v3-ready .site-footer__title {
+  margin-bottom: 1.25rem !important;
+  color: var(--cro-ink) !important;
+  text-align: left;
+}
+
+.cro-v3-ready .site-footer__contact-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.cro-v3-ready .site-footer__contact-item {
+  min-height: 9rem;
+  padding: 1.25rem;
+  color: var(--cro-ink) !important;
+  background: #fff;
+  border: 1px solid rgba(22, 22, 22, 0.09) !important;
+  border-radius: 1rem;
+  box-shadow: 0 12px 32px rgba(20, 20, 20, 0.07);
+}
+
+.cro-v3-ready .site-footer__item-icon {
+  color: #8a6800 !important;
+}
+
+.cro-v3-ready .site-footer__item-title {
+  color: var(--cro-ink) !important;
+}
+
+.cro-v3-ready .site-footer__item-description,
+.cro-v3-ready .site-footer__item-link {
+  color: var(--cro-muted) !important;
+}
+
+.cro-v3-ready .site-footer__item-link:hover {
+  color: var(--cro-ink) !important;
+}
+
+.cro-v3-ready .site-footer__item-link.cro-whatsapp-primary {
+  display: inline-flex;
+  width: auto;
+  min-height: 2.4rem;
+  padding: 0.45rem 0.75rem;
+  color: #fff !important;
+  border-radius: 999px;
+}
+
+/* Exibe somente o número oficial sem reescrever nós controlados pelo React. */
+.cro-v3-ready .site-footer__contact-item:nth-child(2) .site-footer__item-link.cro-whatsapp-primary {
+  font-size: 0 !important;
+}
+
+.cro-v3-ready .site-footer__contact-item:nth-child(2) .site-footer__item-link.cro-whatsapp-primary::after {
+  content: "(16) 99263-1992";
+  font-size: 0.86rem;
+}
+
+.cro-v3-ready .site-footer__section--social {
+  max-width: none;
+  padding: 0;
+  border: 0;
+  justify-self: stretch;
+}
+
+.cro-v3-ready .site-footer__section--social .site-footer__title {
+  margin-bottom: 0 !important;
+  text-align: center;
+}
+
+.cro-v3-ready .site-footer__social-divider {
+  margin-inline: auto;
+  background: var(--cro-yellow-dark);
+}
+
+.cro-v3-ready .site-footer__social-links {
+  justify-content: center;
+}
+
+.cro-v3-ready .site-footer__social-link {
+  color: var(--cro-ink) !important;
+  background: #fff !important;
+  border-color: rgba(22, 22, 22, 0.14) !important;
+  box-shadow: 0 7px 20px rgba(20, 20, 20, 0.06);
+}
+
+.cro-v3-ready .site-footer__social-link.cro-whatsapp-primary {
+  color: #fff !important;
+  background: var(--cro-whatsapp) !important;
+  border-color: var(--cro-whatsapp) !important;
+}
+
+.cro-v3-ready .site-footer__bottom {
+  color: var(--cro-muted) !important;
+  background: #fff !important;
+  border-top: 1px solid rgba(22, 22, 22, 0.08) !important;
+}
+
+.cro-v3-ready .site-footer__bottom p {
+  color: var(--cro-muted) !important;
+}
+
+@media (max-width: 900px) {
+  .cro-v3-ready .site-footer__contact-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .cro-v3-ready .site-footer {
+    padding-top: 2.25rem;
+  }
+
+  .cro-v3-ready .site-footer__content {
+    width: min(100% - 1.25rem, 34rem);
+    gap: 1.5rem;
+    padding-bottom: 2rem;
+  }
+
+  .cro-v3-ready .site-footer__section--contact .site-footer__title {
+    margin-bottom: 1rem !important;
+  }
+
+  .cro-v3-ready .site-footer__contact-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+  }
+
+  .cro-v3-ready .site-footer__contact-item {
+    min-height: 7.3rem;
+    padding: 0.9rem 0.65rem;
+  }
+
+  .cro-v3-ready .site-footer__contact-item:first-child,
+  .cro-v3-ready .site-footer__contact-item:last-child {
+    grid-column: 1 / -1;
+    min-height: 6.5rem;
+  }
+
+  .cro-v3-ready .site-footer__item-title {
+    font-size: 0.72rem;
+  }
+
+  .cro-v3-ready .site-footer__item-description,
+  .cro-v3-ready .site-footer__item-link {
+    font-size: 0.79rem;
+    line-height: 1.4;
+  }
+
+  .cro-v3-ready .site-footer__contact-item:nth-child(3) .site-footer__item-link {
+    white-space: nowrap;
+    font-size: clamp(0.65rem, 2.8vw, 0.75rem);
+    letter-spacing: -0.02em;
+  }
+
+  .cro-v3-ready .site-footer__bottom {
+    padding: 1rem 4.5rem 1rem 1rem;
+  }
 }

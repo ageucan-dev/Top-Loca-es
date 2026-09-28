@@ -171,8 +171,7 @@
     input.removeAttribute("aria-invalid");
     input.removeAttribute("aria-describedby");
 
-    var error = field.querySelector(".cro-phone-error");
-    if (error) error.remove();
+    input.setCustomValidity("");
   }
 
   function showPhoneError(input) {
@@ -183,14 +182,7 @@
     input.setAttribute("aria-invalid", "true");
     input.setAttribute("aria-describedby", PHONE_ERROR_ID);
 
-    var error = field.querySelector(".cro-phone-error");
-    if (!error) {
-      error = document.createElement("p");
-      error.id = PHONE_ERROR_ID;
-      error.className = "product-form__error cro-phone-error";
-      field.appendChild(error);
-    }
-    error.textContent = PHONE_ERROR_TEXT;
+    input.setCustomValidity(PHONE_ERROR_TEXT);
   }
 
   function syncPhoneInput(input, dispatchInput) {
@@ -213,21 +205,7 @@
     field.classList.add("cro-phone-field");
     input.classList.add("cro-phone-input");
 
-    var selector = field.querySelector(".cro-phone-country");
-    if (!selector) {
-      selector = document.createElement("select");
-      selector.className = "cro-phone-country";
-      selector.setAttribute("aria-label", "País e código telefônico");
-      selector.setAttribute("title", "Brasil (+55)");
-
-      var option = document.createElement("option");
-      option.value = "+55";
-      option.textContent = "Brasil +55";
-      option.selected = true;
-      selector.appendChild(option);
-
-      field.insertBefore(selector, input);
-    }
+    field.setAttribute("data-cro-phone-prefix", "Brasil +55");
   }
 
   function trackInvalidPhoneOnce(input, source) {
@@ -365,20 +343,7 @@
   }
 
   function sanitizeThankYouWhatsAppTracking() {
-    if (window.location.pathname !== "/obrigado") return;
-
-    var link = document.querySelector(".cro-whatsapp-cta");
-    if (!link || link.dataset.croPrivacySanitized === CRO_VERSION) return;
-
-    // Clonar remove o listener antigo que enviava o número no dataLayer.
-    var clone = link.cloneNode(true);
-    clone.dataset.croPrivacySanitized = CRO_VERSION;
-    clone.addEventListener("click", function () {
-      pushEvent("cro_whatsapp_click", {
-        cta_location: "thank_you",
-      });
-    });
-    link.replaceWith(clone);
+    return;
   }
 
   // Proteção temporária: se o CTA for clicado no intervalo entre a criação pelo

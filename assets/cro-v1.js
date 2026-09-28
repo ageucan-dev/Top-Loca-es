@@ -134,21 +134,10 @@
     var secondary = hero.querySelector(".home-hero__actions .btn-secondary");
     var imageContainer = hero.querySelector(".home-hero__image-container");
 
-    if (title && !title.dataset.croTitleAction) {
-      title.dataset.croTitleAction = CRO_VERSION;
-      title.classList.add("cro-hero-title-action");
-      title.setAttribute("role", "button");
-      title.setAttribute("tabindex", "0");
-      title.setAttribute("aria-label", "Ir para o formulário de orçamento");
-      bindAction(title, function () {
-        pushEvent("cro_cta_click", { cta_location: "hero_title", cta_type: "heading" });
-        scrollToElement(getForm());
-      });
-    }
+    if (title && !title.dataset.croTitleAction) title.dataset.croTitleAction = CRO_VERSION;
 
     if (primary && !primary.dataset.croEnhanced) {
       primary.dataset.croEnhanced = CRO_VERSION;
-      primary.textContent = "Solicitar orçamento";
       primary.addEventListener("click", function () {
         pushEvent("cro_cta_click", { cta_location: "hero", cta_type: "primary" });
       });
@@ -156,24 +145,20 @@
 
     if (secondary && !secondary.dataset.croEnhanced) {
       secondary.dataset.croEnhanced = CRO_VERSION;
-      secondary.textContent = "Escolher balancim";
       secondary.addEventListener("click", function () {
         pushEvent("cro_cta_click", { cta_location: "hero", cta_type: "secondary" });
       });
     }
 
-    if (imageContainer && !imageContainer.querySelector(".cro-hero-image-action")) {
-      var imageButton = document.createElement("button");
-      imageButton.type = "button";
-      imageButton.className = "cro-hero-image-action";
-      imageButton.setAttribute("aria-label", "Solicitar orçamento pela oferta em destaque");
-      imageButton.title = "Solicitar orçamento";
-      imageButton.innerHTML = '<span class="cro-sr-only">Solicitar orçamento</span>';
-      imageButton.addEventListener("click", function () {
+    if (imageContainer && !imageContainer.dataset.croImageAction) {
+      imageContainer.dataset.croImageAction = CRO_VERSION;
+      imageContainer.classList.add("cro-hero-image-action");
+      imageContainer.setAttribute("role", "button");
+      imageContainer.setAttribute("tabindex", "0");
+      imageContainer.setAttribute("aria-label", "Falar com a Top Locações no WhatsApp");
+      imageContainer.addEventListener("click", function () {
         pushEvent("cro_cta_click", { cta_location: "hero_image", cta_type: "primary" });
-        scrollToElement(getForm());
       });
-      imageContainer.appendChild(imageButton);
     }
   }
 
@@ -197,39 +182,8 @@
       var detailLink = footer && footer.querySelector("a");
       if (!productName || !imageWrapper || !footer || !detailLink) return;
 
-      detailLink.classList.remove("btn-primary");
-      detailLink.classList.add("btn-secondary");
-      detailLink.textContent = "Ver detalhes";
-      detailLink.setAttribute("aria-label", "Ver detalhes de " + productName);
-      detailLink.addEventListener("click", function () {
-        pushEvent("cro_product_details_click", {
-          product_name: productName,
-          interaction_source: "product_card",
-        });
-      });
-
-      var imageButton = document.createElement("button");
-      imageButton.type = "button";
-      imageButton.className = "cro-product-image-action";
-      imageButton.setAttribute("aria-label", "Selecionar " + productName + " e solicitar orçamento");
-      imageButton.title = "Solicitar orçamento";
-      imageButton.innerHTML = '<span class="cro-sr-only">Solicitar orçamento</span>';
-      imageButton.addEventListener("click", function () {
-        preselectProduct(productName, "product_image", true);
-      });
-      imageWrapper.appendChild(imageButton);
-
-      var budgetButton = document.createElement("button");
-      budgetButton.type = "button";
-      budgetButton.className = "btn btn-primary btn-medium product-card__budget-cta";
-      budgetButton.textContent = "Solicitar orçamento";
-      budgetButton.setAttribute("aria-label", "Solicitar orçamento de " + productName);
-      budgetButton.addEventListener("click", function () {
-        preselectProduct(productName, "product_card_cta", true);
-      });
-
-      footer.classList.add("cro-product-actions");
-      footer.appendChild(budgetButton);
+      imageWrapper.dataset.croProductName = productName;
+      detailLink.dataset.croProductName = productName;
       card.dataset.croEnhanced = CRO_VERSION;
     });
   }
@@ -372,55 +326,12 @@
         // Um link inválido não deve interromper o restante da página.
       }
 
-      var text = (link.textContent || "").trim();
-      if (
-        text.indexOf("99247-9494") !== -1 ||
-        text.indexOf("99263-1992") !== -1
-      ) {
-        link.textContent = OFFICIAL_WHATSAPP_DISPLAY;
-        link.setAttribute(
-          "aria-label",
-          OFFICIAL_WHATSAPP_DISPLAY + " — WhatsApp da Top Locações"
-        );
-      }
+      link.setAttribute("aria-label", OFFICIAL_WHATSAPP_DISPLAY + " — WhatsApp da Top Locações");
     });
   }
 
   function enhanceThankYou() {
-    if (window.location.pathname !== "/obrigado") return;
-    if (document.querySelector(".cro-whatsapp-cta")) return;
-
-    var target = Array.prototype.find.call(
-      document.querySelectorAll("a, button"),
-      function (element) {
-        var text = (element.textContent || "").trim().toLowerCase();
-        return (
-          text.indexOf("voltar para o início") !== -1 ||
-          text.indexOf("voltar para o inicio") !== -1
-        );
-      }
-    );
-
-    if (!target) return;
-
-    var link = document.createElement("a");
-    link.href = "https://wa.me/5516992631992";
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
-    link.className = (target.className || "") + " cro-whatsapp-cta";
-    link.setAttribute("aria-label", "Falar com a Top Locações no WhatsApp");
-    link.innerHTML =
-      '<img class="cro-whatsapp-cta__icon" src="/assets/whatsapp-icon.png" alt="" aria-hidden="true">' +
-      "<span>Falar no WhatsApp</span>";
-
-    link.addEventListener("click", function () {
-      pushEvent("cro_whatsapp_click", {
-        cta_location: "thank_you",
-        phone: "5516992631992",
-      });
-    });
-
-    target.replaceWith(link);
+    return;
   }
 
   function trackConfirmedLead() {
