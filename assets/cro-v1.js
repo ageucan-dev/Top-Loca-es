@@ -3,6 +3,8 @@
 
   var CRO_VERSION = "mobile-conversion-v1";
   var SUCCESS_WINDOW_MS = 30 * 60 * 1000;
+  var OFFICIAL_WHATSAPP = "5516992631992";
+  var OFFICIAL_WHATSAPP_DISPLAY = "(16) 99263-1992";
   var scheduled = false;
   var formVisibilityObserver = null;
   var formViewObserver = null;
@@ -433,6 +435,32 @@
     formVisibilityObserver.observe(getForm());
   }
 
+  function standardizeWhatsAppNumber() {
+    document.querySelectorAll('a[href*="wa.me/"]').forEach(function (link) {
+      try {
+        var url = new URL(link.href);
+        if (url.hostname === "wa.me") {
+          url.pathname = "/" + OFFICIAL_WHATSAPP;
+          link.href = url.toString();
+        }
+      } catch (error) {
+        // Um link inválido não deve interromper o restante da página.
+      }
+
+      var text = (link.textContent || "").trim();
+      if (
+        text.indexOf("99247-9494") !== -1 ||
+        text.indexOf("99263-1992") !== -1
+      ) {
+        link.textContent = OFFICIAL_WHATSAPP_DISPLAY;
+        link.setAttribute(
+          "aria-label",
+          OFFICIAL_WHATSAPP_DISPLAY + " — WhatsApp da Top Locações"
+        );
+      }
+    });
+  }
+
   function enhanceThankYou() {
     if (window.location.pathname !== "/obrigado") return;
     if (document.querySelector(".cro-whatsapp-cta")) return;
@@ -451,7 +479,7 @@
     if (!target) return;
 
     var link = document.createElement("a");
-    link.href = "https://wa.me/5516981357855";
+    link.href = "https://wa.me/5516992631992";
     link.target = "_blank";
     link.rel = "noopener noreferrer";
     link.className = (target.className || "") + " cro-whatsapp-cta";
@@ -463,7 +491,7 @@
     link.addEventListener("click", function () {
       pushEvent("cro_whatsapp_click", {
         cta_location: "thank_you",
-        phone: "5516981357855",
+        phone: "5516992631992",
       });
     });
 
@@ -489,6 +517,7 @@
 
   function enhance() {
     scheduled = false;
+    standardizeWhatsAppNumber();
     trackConfirmedLead();
     enhanceThankYou();
     if (window.location.pathname === "/") {

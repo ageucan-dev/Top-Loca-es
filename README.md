@@ -1,22 +1,50 @@
-# Top Locações — validação CRO
+# Top Locações — site publicado
 
-Esta branch mantém o site estático usado na Hostinger e adiciona somente a camada de otimização CRO documentada em `CRO-AUDIT.md` e `CRO-CHANGELOG.md`.
+Repositório da versão estática publicada em [locacoestop.com.br](https://locacoestop.com.br/).
 
-## Abrir no GitHub Codespaces
+## Estado atual
 
-No terminal, na raiz do repositório, execute:
+- A branch `main` representa a versão publicada validada em 28/09/2026.
+- A camada de conversão está nos arquivos `assets/cro-v1.*` e `assets/cro-phone-v2.*`.
+- A hospedagem é feita na Hostinger; não há deploy automático configurado neste repositório.
+- Este repositório contém a distribuição compilada do site. Alterações no bundle principal devem ser evitadas até o projeto-fonte ser recuperado.
+
+## Contato oficial
+
+O WhatsApp oficial é **(16) 99263-1992**, no formato internacional **5516992631992**.
+
+Antes de publicar qualquer alteração, conferir se todos os CTAs, rodapé, página `/obrigado` e eventos de análise apontam para esse número.
+
+## Fluxo de alterações
+
+1. Criar uma branch a partir da `main`.
+2. Fazer alterações somente na branch.
+3. Validar Home, produtos, formulário e página de agradecimento.
+4. Abrir um pull request para a `main`.
+5. Publicar na Hostinger apenas depois da aprovação do PR e da validação visual.
+6. Confirmar o site publicado após o upload.
+
+Nunca alterar diretamente a `main` nem substituir os arquivos da Hostinger sem manter uma versão recuperável.
+
+## Validação local
+
+Na raiz do repositório:
 
 ```bash
-git fetch origin
-git switch cro/mobile-conversion-v1
-git pull origin cro/mobile-conversion-v1
 python3 -m http.server 5173
 ```
 
-Depois, abra a porta **5173** pela aba **Ports** do Codespaces.
+Abra a porta 5173. No servidor local simples, valide as rotas internas navegando pelos links do próprio site. O fallback direto das rotas é atendido em produção pelo `.htaccess`.
 
-Para validar as rotas internas, navegue pelos links do próprio site. Em produção, o fallback de rotas continua sendo feito pelo `.htaccess` já existente.
+## Checklist obrigatório
 
-## Página de obrigado
-
-O botão principal da página `/obrigado` foi convertido para **Falar no WhatsApp**, com destino para **(16) 98135-7855** (`5516981357855`) e ícone do WhatsApp em `assets/whatsapp-icon.png`.
+- Home em celular e desktop.
+- Menu móvel e CTAs.
+- `/balancim-eletrico` e `/balancim-manual`.
+- Pré-seleção correta do produto.
+- Formulário sem envio de dados reais durante testes visuais.
+- `/obrigado` com `noindex, nofollow`.
+- PDFs e imagens.
+- Console sem erros.
+- Metadados, canonical, sitemap e robots.
+- WhatsApp oficial: `5516992631992`.
