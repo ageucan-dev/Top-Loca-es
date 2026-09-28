@@ -1,0 +1,62 @@
+name: Verificação do site estático
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar o repositório
+        uses: actions/checkout@v4
+
+      - name: Conferir arquivos essenciais
+        shell: bash
+        run: |
+          set -euo pipefail
+          for file in             index.html             .htaccess             robots.txt             sitemap.xml             assets/cro-v1.js             assets/cro-v1.css             assets/cro-phone-v2.js             assets/cro-phone-v2.css
+          do
+            test -f "$file"
+          done
+
+      - name: Verificar sintaxe do JavaScript adicional
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check assets/cro-v1.js
+          node --check assets/cro-phone-v2.js
+
+      - name: Conferir referências locais do HTML
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import pathlib
+          import re
+
+          html = pathlib.Path("index.html").read_text(encoding="utf-8")
+          references = re.findall(r'(?:src|href)="(/[^"#?]+)"', html)
+          missing = [
+              reference
+              for reference in references
+              if not pathlib.Path(reference.lstrip("/")).exists()
+          ]
+          if missing:
+              raise SystemExit("Arquivos locais ausentes: " + ", ".join(missing))
+          PY
+
+      - name: Conferir WhatsApp oficial
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'OFFICIAL_WHATSAPP = "5516992631992"' assets/cro-v1.js
+          if grep -E '5516981357855|\(16\) 98135-7855' assets/cro-v1.js README.md; then
+            echo "Foi encontrado um número antigo de WhatsApp."
+            exit 1
+          fi
