@@ -13,6 +13,7 @@
 - [Página inicial](https://locacoestop.com.br/): visão geral dos serviços, diferenciais, perguntas frequentes e solicitação de orçamento.
 - [Balancim elétrico](https://locacoestop.com.br/balancim-eletrico): aplicações, características, segurança e locação de balancim elétrico.
 - [Balancim manual](https://locacoestop.com.br/balancim-manual): aplicações, características, segurança e locação de balancim manual.
+- [Política de privacidade](https://locacoestop.com.br/politica-de-privacidade): informações sobre coleta, uso e proteção de dados pessoais nos canais digitais.
 
 ## Produtos e serviços
 
@@ -22,3 +23,4 @@
 - Assistência técnica durante a locação
 
 As condições de entrega, montagem, treinamento, disponibilidade e valores devem ser confirmadas diretamente com a equipe da Top Locações.
+

@@ -8,6 +8,8 @@
   var scheduled = false;
   var formVisibilityObserver = null;
   var formViewObserver = null;
+  var rootObserver = null;
+  var enhancedRouteRoot = null;
 
   function pushEvent(eventName, details) {
     window.dataLayer = window.dataLayer || [];
@@ -351,8 +353,47 @@
     clearPendingLead();
   }
 
+  function getRouteRoot() {
+    var path = window.location.pathname.replace(/\/+$/, "") || "/";
+    var selectors = {
+      "/": ".home",
+      "/balancim-eletrico": ".produto-eletrico",
+      "/balancim-manual": ".produto-manual",
+      "/obrigado": ".thank-you",
+    };
+
+    return document.querySelector(selectors[path] || "#root > .layout");
+  }
+
+  function stopRootObserver() {
+    if (!rootObserver) return;
+    rootObserver.disconnect();
+    rootObserver = null;
+  }
+
+  function observeRootUntilReady() {
+    var root = document.querySelector("#root");
+    if (!root || rootObserver) return;
+
+    rootObserver = new MutationObserver(scheduleEnhance);
+    rootObserver.observe(root, {
+      childList: true,
+      subtree: true,
+    });
+  }
+
   function enhance() {
     scheduled = false;
+    var routeRoot = getRouteRoot();
+    if (!routeRoot) {
+      observeRootUntilReady();
+      return;
+    }
+    if (enhancedRouteRoot === routeRoot) {
+      stopRootObserver();
+      return;
+    }
+
     standardizeWhatsAppNumber();
     trackConfirmedLead();
     enhanceThankYou();
@@ -364,6 +405,8 @@
     enhanceForm();
     preselectProductFromRoute();
     addStickyCta();
+    enhancedRouteRoot = routeRoot;
+    stopRootObserver();
   }
 
   function scheduleEnhance() {
@@ -372,25 +415,28 @@
     window.requestAnimationFrame(enhance);
   }
 
+  function handleRouteChange() {
+    enhancedRouteRoot = null;
+    observeRootUntilReady();
+    scheduleEnhance();
+  }
+
   ["pushState", "replaceState"].forEach(function (methodName) {
     var original = window.history[methodName];
     window.history[methodName] = function () {
       var result = original.apply(this, arguments);
-      scheduleEnhance();
+      handleRouteChange();
       return result;
     };
   });
 
-  window.addEventListener("popstate", scheduleEnhance);
-  window.addEventListener("pageshow", scheduleEnhance);
+  window.addEventListener("popstate", handleRouteChange);
+  window.addEventListener("pageshow", function () {
+    observeRootUntilReady();
+    scheduleEnhance();
+  });
 
-  var root = document.querySelector("#root");
-  if (root) {
-    new MutationObserver(scheduleEnhance).observe(root, {
-      childList: true,
-      subtree: true,
-    });
-  }
-
+  observeRootUntilReady();
   scheduleEnhance();
 })();
+

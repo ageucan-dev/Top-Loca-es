@@ -4,8 +4,10 @@
   var VERSION = "whatsapp-seo-v3";
   var PHONE = "5516992631992";
   var PHONE_DISPLAY = "(16) 99263-1992";
+  var ADS_WHATSAPP_SEND_TO = "AW-17086860551/knCDCJrY188aEIea09M_";
   var ROTATION_MS = 4600;
   var scheduled = false;
+  var rootObserver = null;
   var pendingWhatsApp = null;
   var leadStep = 1;
   var leadAnswers = { product: "", city: "", email: "" };
@@ -18,6 +20,19 @@
       cro_version: VERSION,
       page_path: window.location.pathname
     }, details || {}));
+  }
+
+  function sendAdsWhatsAppConversion(answers) {
+    if (typeof window.loadTopTracking === "function") window.loadTopTracking();
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+    if (answers && answers.email) {
+      window.gtag("set", "user_data", { email: answers.email });
+    }
+    window.gtag("event", "conversion", {
+      send_to: ADS_WHATSAPP_SEND_TO,
+      transport_type: "beacon"
+    });
   }
 
   function productContext(element) {
@@ -57,6 +72,7 @@
       cta_location: location,
       product_name: product
     });
+    sendAdsWhatsAppConversion(answers);
     window.open(whatsAppUrl(element, answers), "_blank", "noopener,noreferrer");
   }
 
@@ -95,7 +111,7 @@
       '      <p>Usaremos este dado para atendimento e medição da campanha.</p>' +
       '      <div class="cro-lead-modal__progress" role="progressbar" aria-label="Progresso da solicitação" aria-valuemin="1" aria-valuemax="3" aria-valuenow="3"><span style="width:100%"></span></div>' +
       '      <label class="cro-lead-field"><span>Seu melhor e-mail</span><input type="email" name="lead_email" autocomplete="email" placeholder="voce@empresa.com.br" required></label>' +
-      '      <label class="cro-lead-consent"><input type="checkbox" name="lead_consent" required><span>Concordo com o uso do meu e-mail pela Top Locações e pelo Google Ads para atendimento e mensuração publicitária.</span></label>' +
+      '      <label class="cro-lead-consent"><input type="checkbox" name="lead_consent" required><span>Concordo com o uso do meu e-mail pela Top Locações e pelo Google Ads para atendimento e mensuração publicitária, conforme a <a href="/politica-de-privacidade" target="_blank" rel="noopener">Política de Privacidade</a>.</span></label>' +
       '      <div class="cro-lead-modal__error" role="alert"></div>' +
       '      <div class="cro-lead-modal__actions"><button type="button" class="cro-lead-back" data-lead-back>Voltar</button><button type="submit" class="cro-lead-finish">Abrir WhatsApp</button></div>' +
       '    </div>' +
@@ -221,19 +237,20 @@
 
   function isConversionCta(element) {
     if (!element || element.closest("#product-form")) return false;
+    if (element.closest(".nav-list__cta")) return true;
     if (element.closest("nav, .menu, .product-faq, .carousel-controls")) return false;
     if (element.closest(".promo-bar, .cro-hero-image-action, .cro-product-image-action, .product-card__budget-cta")) return true;
     if (element.matches('a[href*="wa.me"], .cro-whatsapp-float')) return true;
 
     var text = (element.textContent || element.getAttribute("aria-label") || "").trim().toLowerCase();
-    return /orçamento|entrar em contato|falar no whatsapp|pedir orçamento|quero um orçamento/.test(text);
+    return /orçamento|entrar em contato|falar no whatsapp|pedir orçamento|quero um orçamento|alugar balancim/.test(text);
   }
 
   function routeConversions() {
     if (document.documentElement.dataset.croWhatsAppCapture === VERSION) return;
     document.documentElement.dataset.croWhatsAppCapture = VERSION;
     document.addEventListener("click", function (event) {
-      var target = event.target.closest("a, button, [role='button']");
+      var target = event.target.closest("a, button, [role='button'], [role='link']");
       if (!isConversionCta(target)) return;
       event.preventDefault();
       event.stopImmediatePropagation();
@@ -292,7 +309,7 @@
     bar.addEventListener("keydown", function (event) {
       if (event.key !== "Enter" && event.key !== " ") return;
       event.preventDefault();
-      openWhatsApp(bar, "promo_ticker");
+      openLeadModal(bar, "promo_ticker");
     });
   }
 
@@ -328,6 +345,9 @@
   function enhanceCtas() {
     document.querySelectorAll("a, button").forEach(function (element) {
       if (!isConversionCta(element) || element.closest("#product-form")) return;
+      if (element.closest(".nav-list__cta")) {
+        element.textContent = "Alugar Balancim";
+      }
       if (element.matches(".cro-hero-image-action, .cro-product-image-action")) {
         element.setAttribute("aria-label", "Falar com a Top Locações no WhatsApp");
         return;
@@ -372,7 +392,7 @@
     link.target = "_blank";
     link.rel = "noopener noreferrer";
     link.setAttribute("aria-label", "Falar agora com a Top Locações no WhatsApp");
-    link.innerHTML = '<img src="/assets/whatsapp-icon.png" width="64" height="64" alt="" aria-hidden="true"><span>Fale conosco</span>';
+    link.innerHTML = '<svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a8 8 0 0 1-11.8 7l-4.2 1 1.1-4a8 8 0 1 1 14.9-4Z"></path><path d="M9 8.8c.2 3 2.2 5.1 5.3 6"></path><path d="M9.2 8.7c.4-.5.7-.5 1-.2l.8 1c.2.3.2.6-.1.9l-.3.3c.5 1 1.3 1.8 2.3 2.3l.4-.4c.3-.3.6-.3.9-.1l1 .7c.3.2.4.6.2 1"></path></svg><span>Fale conosco</span>';
     document.body.appendChild(link);
   }
 
@@ -398,6 +418,19 @@
     document.querySelectorAll('a[href*="wa.me"]').forEach(function (link) {
       link.href = whatsAppUrl(link);
     });
+    var footerPhone = document.querySelector(".site-footer__contact-item:nth-child(2) .site-footer__item-link");
+    if (footerPhone) {
+      footerPhone.textContent = PHONE_DISPLAY;
+      footerPhone.setAttribute("aria-label", PHONE_DISPLAY + " — WhatsApp da Top Locações");
+    }
+    var footerBottom = document.querySelector(".site-footer__bottom");
+    if (footerBottom && !footerBottom.querySelector(".cro-footer-privacy")) {
+      var privacyLink = document.createElement("a");
+      privacyLink.className = "cro-footer-privacy";
+      privacyLink.href = "/politica-de-privacidade";
+      privacyLink.textContent = "Política de Privacidade";
+      footerBottom.appendChild(privacyLink);
+    }
   }
 
   function optimizeMetadata() {
@@ -405,15 +438,23 @@
     var pages = {
       "/": {
         title: "Locação de balancins em Ribeirão Preto | Top Locações",
-        description: "Locação de balancins elétricos e manuais em Ribeirão Preto e região, com entrega ágil e assistência técnica para obras e fachadas."
+        description: "Locação de balancins elétricos e manuais em Ribeirão Preto e região, com equipamentos revisados, entrega ágil e atendimento pelo WhatsApp.",
+        robots: "index, follow, max-image-preview:large"
       },
       "/balancim-eletrico": {
-        title: "Aluguel de balancim elétrico em Ribeirão Preto | Top Locações",
-        description: "Alugue balancim elétrico em Ribeirão Preto e região para fachadas, manutenção predial e obras com maior produtividade e suporte técnico."
+        title: "Locação de Balancim Elétrico em Ribeirão Preto | Top Locações",
+        description: "Locação de balancim elétrico em Ribeirão Preto e região para fachadas, manutenção predial e obras, com equipamento revisado e suporte técnico.",
+        robots: "index, follow, max-image-preview:large"
       },
       "/balancim-manual": {
-        title: "Aluguel de balancim manual em Ribeirão Preto | Top Locações",
-        description: "Locação de balancim manual em Ribeirão Preto e região para pintura, reformas, fachadas e serviços pontuais em altura."
+        title: "Locação de Balancim Manual em Ribeirão Preto | Top Locações",
+        description: "Locação de balancim manual em Ribeirão Preto e região para fachadas, reformas e serviços em altura, com equipamento revisado e suporte rápido.",
+        robots: "index, follow, max-image-preview:large"
+      },
+      "/obrigado": {
+        title: "Obrigado pelo contato | Top Locações",
+        description: "Recebemos suas informações com sucesso. Em breve, a equipe da Top Locações entrará em contato.",
+        robots: "noindex, follow"
       }
     };
     var data = pages[route];
@@ -427,15 +468,34 @@
     if (!description.parentNode) document.head.appendChild(description);
     Array.prototype.slice.call(descriptions, 1).forEach(function (item) { item.remove(); });
 
-    var canonical = document.querySelector('link[rel="canonical"]') || document.createElement("link");
+    var robotTags = document.querySelectorAll('meta[name="robots"]');
+    var robots = robotTags[0] || document.createElement("meta");
+    robots.name = "robots";
+    robots.content = data.robots;
+    if (!robots.parentNode) document.head.appendChild(robots);
+    Array.prototype.slice.call(robotTags, 1).forEach(function (item) { item.remove(); });
+
+    var canonicalTags = document.querySelectorAll('link[rel="canonical"]');
+    var canonical = canonicalTags[0] || document.createElement("link");
     canonical.rel = "canonical";
     canonical.href = "https://locacoestop.com.br" + (route === "/" ? "/" : route);
     if (!canonical.parentNode) document.head.appendChild(canonical);
+    Array.prototype.slice.call(canonicalTags, 1).forEach(function (item) { item.remove(); });
 
     ["og:title", "og:description", "og:url"].forEach(function (property) {
-      var meta = document.querySelector('meta[property="' + property + '"]');
+      var matches = document.querySelectorAll('meta[property="' + property + '"]');
+      var meta = matches[0];
       if (!meta) return;
       meta.content = property === "og:title" ? data.title : property === "og:description" ? data.description : canonical.href;
+      Array.prototype.slice.call(matches, 1).forEach(function (item) { item.remove(); });
+    });
+
+    ["twitter:title", "twitter:description"].forEach(function (name) {
+      var matches = document.querySelectorAll('meta[name="' + name + '"]');
+      var meta = matches[0];
+      if (!meta) return;
+      meta.content = name === "twitter:title" ? data.title : data.description;
+      Array.prototype.slice.call(matches, 1).forEach(function (item) { item.remove(); });
     });
   }
 
@@ -466,8 +526,12 @@
     optimizeHeroImage();
     standardizeContact();
     optimizeMetadata();
-    addRevealEffects();
+    window.setTimeout(optimizeMetadata, 250);
     document.body.classList.add("cro-v3-ready");
+    if (document.querySelector(".home, .produto-eletrico, .produto-manual, .thank-you") && rootObserver) {
+      rootObserver.disconnect();
+      rootObserver = null;
+    }
   }
 
   function schedule() {
@@ -479,7 +543,10 @@
   routeConversions();
   stabilizeInternalNavigation();
   var root = document.querySelector("#root");
-  if (root) new MutationObserver(schedule).observe(root, { childList: true, subtree: true });
+  if (root) {
+    rootObserver = new MutationObserver(schedule);
+    rootObserver.observe(root, { childList: true, subtree: true });
+  }
   window.addEventListener("pageshow", schedule);
   window.addEventListener("popstate", schedule);
   schedule();

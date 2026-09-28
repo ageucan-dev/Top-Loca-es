@@ -8,6 +8,22 @@
   scroll-margin-top: 7.5rem;
 }
 
+/* Mantém uma única rolagem: a da janela. O overflow-x:hidden do bundle
+   transformava o body em um segundo contêiner vertical em alguns navegadores. */
+html {
+  height: auto;
+  min-height: 100%;
+  overflow-x: clip;
+  overflow-y: auto;
+}
+
+body {
+  height: auto;
+  min-height: 100%;
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
 /* O título principal já contextualiza o serviço; remove o selo redundante do hero. */
 .home-hero__badge { display: none !important; }
 
@@ -30,7 +46,6 @@ body.cro-lead-modal-open { overflow: hidden; }
   position: absolute;
   inset: 0;
   background: rgba(10, 10, 10, 0.7);
-  backdrop-filter: blur(5px);
 }
 
 .cro-lead-modal__dialog {
@@ -117,6 +132,7 @@ body.cro-lead-modal-open { overflow: hidden; }
 
 .cro-lead-consent { display: flex; gap: 0.65rem; margin-top: 1rem; color: #56595e; font-size: 0.78rem; line-height: 1.4; }
 .cro-lead-consent input { width: 1.1rem; height: 1.1rem; flex: 0 0 auto; margin-top: 0.08rem; accent-color: #128c43; }
+.cro-lead-consent a { color: #176c36; font-weight: 750; text-underline-offset: 2px; }
 .cro-lead-modal__error { min-height: 1.25rem; margin-top: 0.55rem; color: #aa1d1d; font-size: 0.78rem; font-weight: 650; }
 
 .cro-lead-modal__actions { display: grid; grid-template-columns: auto 1fr; gap: 0.7rem; margin-top: 0.8rem; }
@@ -850,6 +866,16 @@ body.cro-v3-ready {
   border-radius: 1.35rem;
 }
 
+/* O conteúdo acima da dobra deve aparecer na primeira pintura, sem atrasar a LCP. */
+.cro-v3-ready .home-hero__title,
+.cro-v3-ready .home-hero__subtitle,
+.cro-v3-ready .home-hero__microbenefits,
+.cro-v3-ready .home-hero__actions,
+.cro-v3-ready .home-hero__micro-proof,
+.cro-v3-ready .home-hero__image-container {
+  animation: none !important;
+}
+
 .cro-v3-ready section:not(.home-hero):not(.promo-bar) {
   color: var(--cro-ink);
   background-color: var(--cro-surface);
@@ -954,7 +980,8 @@ body.cro-v3-ready {
   transition: transform 220ms ease, box-shadow 220ms ease;
 }
 
-.cro-whatsapp-float img {
+.cro-whatsapp-float img,
+.cro-whatsapp-float svg {
   width: 3rem;
   height: 3rem;
   object-fit: contain;
@@ -982,11 +1009,6 @@ body.cro-v3-ready {
 .cro-reveal.is-visible {
   opacity: 1;
   transform: translateY(0);
-}
-
-.cro-v3-ready main > section:nth-of-type(n + 4) {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 760px;
 }
 
 /* Integração do campo internacional, sem uma segunda folha bloqueante. */
@@ -1375,6 +1397,21 @@ body.cro-v3-ready {
 
 .cro-v3-ready .site-footer__bottom p {
   color: var(--cro-muted) !important;
+}
+
+.cro-v3-ready .cro-footer-privacy {
+  display: inline-block;
+  margin-top: 0.45rem;
+  color: #434a55;
+  font-size: 0.8rem;
+  font-weight: 650;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.cro-v3-ready .cro-footer-privacy:hover,
+.cro-v3-ready .cro-footer-privacy:focus-visible {
+  color: #111318;
 }
 
 @media (max-width: 900px) {

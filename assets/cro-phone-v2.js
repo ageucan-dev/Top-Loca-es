@@ -5,6 +5,8 @@
   var PHONE_ERROR_ID = "cro-whatsapp-error";
   var PHONE_ERROR_TEXT = "Informe um WhatsApp válido com DDD.";
   var scheduled = false;
+  var rootObserver = null;
+  var enhancedRouteRoot = null;
 
   function pushEvent(eventName, details) {
     window.dataLayer = window.dataLayer || [];
@@ -346,6 +348,35 @@
     return;
   }
 
+  function getRouteRoot() {
+    var path = window.location.pathname.replace(/\/+$/, "") || "/";
+    var selectors = {
+      "/": ".home",
+      "/balancim-eletrico": ".produto-eletrico",
+      "/balancim-manual": ".produto-manual",
+      "/obrigado": ".thank-you",
+    };
+
+    return document.querySelector(selectors[path] || "#root > .layout");
+  }
+
+  function stopRootObserver() {
+    if (!rootObserver) return;
+    rootObserver.disconnect();
+    rootObserver = null;
+  }
+
+  function observeRootUntilReady() {
+    var root = document.querySelector("#root");
+    if (!root || rootObserver) return;
+
+    rootObserver = new MutationObserver(scheduleEnhance);
+    rootObserver.observe(root, {
+      childList: true,
+      subtree: true,
+    });
+  }
+
   // Proteção temporária: se o CTA for clicado no intervalo entre a criação pelo
   // cro-v1.js e a sanitização, bloqueie o listener antigo sem impedir o link.
   document.addEventListener(
@@ -367,9 +398,21 @@
 
   function enhance() {
     scheduled = false;
+    var routeRoot = getRouteRoot();
+    if (!routeRoot) {
+      observeRootUntilReady();
+      return;
+    }
+    if (enhancedRouteRoot === routeRoot) {
+      stopRootObserver();
+      return;
+    }
+
     enhanceHeroPaths();
     enhancePhoneField();
     sanitizeThankYouWhatsAppTracking();
+    enhancedRouteRoot = routeRoot;
+    stopRootObserver();
   }
 
   function scheduleEnhance() {
@@ -378,16 +421,28 @@
     window.requestAnimationFrame(enhance);
   }
 
-  window.addEventListener("pageshow", scheduleEnhance);
-  window.addEventListener("popstate", scheduleEnhance);
-
-  var root = document.querySelector("#root");
-  if (root) {
-    new MutationObserver(scheduleEnhance).observe(root, {
-      childList: true,
-      subtree: true,
-    });
+  function handleRouteChange() {
+    enhancedRouteRoot = null;
+    observeRootUntilReady();
+    scheduleEnhance();
   }
 
+  ["pushState", "replaceState"].forEach(function (methodName) {
+    var original = window.history[methodName];
+    window.history[methodName] = function () {
+      var result = original.apply(this, arguments);
+      handleRouteChange();
+      return result;
+    };
+  });
+
+  window.addEventListener("pageshow", function () {
+    observeRootUntilReady();
+    scheduleEnhance();
+  });
+  window.addEventListener("popstate", handleRouteChange);
+
+  observeRootUntilReady();
   scheduleEnhance();
 })();
+
