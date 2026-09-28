@@ -71,13 +71,11 @@
       '<div class="cro-lead-modal__backdrop" data-lead-close></div>' +
       '<section class="cro-lead-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="cro-lead-title">' +
       '  <button class="cro-lead-modal__close" type="button" data-lead-close aria-label="Fechar">×</button>' +
-      '  <div class="cro-lead-modal__eyebrow">ORÇAMENTO RÁPIDO</div>' +
-      '  <div class="cro-lead-modal__progress" aria-label="Progresso"><span></span><span></span><span></span></div>' +
       '  <form class="cro-lead-modal__form" novalidate>' +
       '    <div class="cro-lead-step" data-lead-step="1">' +
-      '      <div class="cro-lead-modal__count">Passo 1 de 3</div>' +
       '      <h2 id="cro-lead-title">Qual balancim você precisa?</h2>' +
       '      <p>Escolha o equipamento para prepararmos a conversa.</p>' +
+      '      <div class="cro-lead-modal__progress" role="progressbar" aria-label="Progresso da solicitação" aria-valuemin="1" aria-valuemax="3" aria-valuenow="1"><span style="width:33.333%"></span></div>' +
       '      <div class="cro-lead-options">' +
       '        <button type="button" data-lead-product="balancim elétrico"><strong>Balancim elétrico</strong><span>Mais agilidade para obras maiores</span></button>' +
       '        <button type="button" data-lead-product="balancim manual"><strong>Balancim manual</strong><span>Praticidade e ótimo custo-benefício</span></button>' +
@@ -85,17 +83,17 @@
       '      </div>' +
       '    </div>' +
       '    <div class="cro-lead-step" data-lead-step="2" hidden>' +
-      '      <div class="cro-lead-modal__count">Passo 2 de 3</div>' +
       '      <h2>Em qual cidade será a obra?</h2>' +
       '      <p>Assim confirmamos rapidamente a disponibilidade de atendimento.</p>' +
+      '      <div class="cro-lead-modal__progress" role="progressbar" aria-label="Progresso da solicitação" aria-valuemin="1" aria-valuemax="3" aria-valuenow="2"><span style="width:66.666%"></span></div>' +
       '      <label class="cro-lead-field"><span>Cidade da obra</span><input type="text" name="lead_city" autocomplete="address-level2" placeholder="Ex.: Ribeirão Preto" required></label>' +
       '      <div class="cro-lead-modal__error" role="alert"></div>' +
       '      <div class="cro-lead-modal__actions"><button type="button" class="cro-lead-back" data-lead-back>Voltar</button><button type="submit" class="cro-lead-next">Continuar</button></div>' +
       '    </div>' +
       '    <div class="cro-lead-step" data-lead-step="3" hidden>' +
-      '      <div class="cro-lead-modal__count">Passo 3 de 3</div>' +
       '      <h2>Para concluir, qual é seu e-mail?</h2>' +
       '      <p>Usaremos este dado para atendimento e medição da campanha.</p>' +
+      '      <div class="cro-lead-modal__progress" role="progressbar" aria-label="Progresso da solicitação" aria-valuemin="1" aria-valuemax="3" aria-valuenow="3"><span style="width:100%"></span></div>' +
       '      <label class="cro-lead-field"><span>Seu melhor e-mail</span><input type="email" name="lead_email" autocomplete="email" placeholder="voce@empresa.com.br" required></label>' +
       '      <label class="cro-lead-consent"><input type="checkbox" name="lead_consent" required><span>Concordo com o uso do meu e-mail pela Top Locações e pelo Google Ads para atendimento e mensuração publicitária.</span></label>' +
       '      <div class="cro-lead-modal__error" role="alert"></div>' +
@@ -180,9 +178,6 @@
     leadStep = step;
     modal.querySelectorAll("[data-lead-step]").forEach(function (panel) {
       panel.hidden = Number(panel.dataset.leadStep) !== step;
-    });
-    modal.querySelectorAll(".cro-lead-modal__progress span").forEach(function (item, index) {
-      item.classList.toggle("is-active", index < step);
     });
     var focusTarget = step === 1 ? modal.querySelector("[data-lead-product]") : modal.querySelector('[data-lead-step="' + step + '"] input');
     window.setTimeout(function () { if (focusTarget) focusTarget.focus(); }, 40);
@@ -489,3 +484,4 @@
   window.addEventListener("popstate", schedule);
   schedule();
 })();
+
