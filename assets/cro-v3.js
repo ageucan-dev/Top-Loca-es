@@ -4,7 +4,6 @@
   var VERSION = "whatsapp-seo-v3";
   var PHONE = "5516992631992";
   var PHONE_DISPLAY = "(16) 99263-1992";
-  var ADS_WHATSAPP_SEND_TO = "AW-17086860551/knCDCJrY188aEIea09M_";
   var ROTATION_MS = 4600;
   var scheduled = false;
   var rootObserver = null;
@@ -22,18 +21,6 @@
     }, details || {}));
   }
 
-  function sendAdsWhatsAppConversion(answers) {
-    if (typeof window.loadTopTracking === "function") window.loadTopTracking();
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
-    if (answers && answers.email) {
-      window.gtag("set", "user_data", { email: answers.email });
-    }
-    window.gtag("event", "conversion", {
-      send_to: ADS_WHATSAPP_SEND_TO,
-      transport_type: "beacon"
-    });
-  }
 
   function productContext(element) {
     var scope = element && element.closest(".product-card, .product-hero, .application-card, main");
@@ -72,7 +59,6 @@
       cta_location: location,
       product_name: product
     });
-    sendAdsWhatsAppConversion(answers);
     window.open(whatsAppUrl(element, answers), "_blank", "noopener,noreferrer");
   }
 
