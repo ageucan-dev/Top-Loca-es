@@ -1,32 +1,101 @@
+DirectoryIndex index.html
+ErrorDocument 404 /404.html
+
+<IfModule mod_negotiation.c>
+  Options -MultiViews
+</IfModule>
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule ^ index.html [L]
+
+  # Endpoints reservados que não existem neste site.
+  RewriteRule ^\.well-known/(?:ai-catalog\.json|ard\.json)$ - [R=404,L]
+
+  # Impede que as versões .html concorram com as URLs públicas.
+  RewriteCond %{THE_REQUEST} \s/+index\.html(?:[?\s]) [NC]
+  RewriteRule ^index\.html$ / [R=301,L,NE]
+
+  RewriteCond %{THE_REQUEST} \s/+balancim-eletrico\.html(?:[?\s]) [NC]
+  RewriteRule ^balancim-eletrico\.html$ /balancim-eletrico [R=301,L,NE]
+
+  RewriteCond %{THE_REQUEST} \s/+balancim-manual\.html(?:[?\s]) [NC]
+  RewriteRule ^balancim-manual\.html$ /balancim-manual [R=301,L,NE]
+
+  RewriteCond %{THE_REQUEST} \s/+obrigado\.html(?:[?\s]) [NC]
+  RewriteRule ^obrigado\.html$ /obrigado [R=301,L,NE]
+
+  RewriteCond %{THE_REQUEST} \s/+politica-de-privacidade\.html(?:[?\s]) [NC]
+  RewriteRule ^politica-de-privacidade\.html$ /politica-de-privacidade [R=301,L,NE]
+
+  # Uma única forma canônica, sem barra final, para as páginas internas.
+  RewriteRule ^(balancim-eletrico|balancim-manual|obrigado|politica-de-privacidade)/+$ /$1 [R=301,L,NE]
+
+  # Mapeamento exato das URLs públicas para seus documentos estáticos.
+  RewriteRule ^balancim-eletrico$ balancim-eletrico.html [L]
+  RewriteRule ^balancim-manual$ balancim-manual.html [L]
+  RewriteRule ^obrigado$ obrigado.html [L]
+  RewriteRule ^politica-de-privacidade$ politica-de-privacidade.html [L]
+
+  # Arquivos e diretórios reais continuam acessíveis normalmente.
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Qualquer outro caminho recebe status HTTP 404 real e o ErrorDocument acima.
+  RewriteRule ^ - [R=404,L]
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/javascript application/javascript application/json application/ld+json application/xml image/svg+xml
+</IfModule>
+
+<IfModule mod_brotli.c>
+  AddOutputFilterByType BROTLI_COMPRESS text/html text/plain text/css text/javascript application/javascript application/json application/ld+json application/xml image/svg+xml
 </IfModule>
 
 <IfModule mod_expires.c>
   ExpiresActive On
+  ExpiresByType text/html "access plus 0 seconds"
   ExpiresByType text/css "access plus 1 year"
   ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType text/javascript "access plus 1 year"
   ExpiresByType image/avif "access plus 1 year"
   ExpiresByType image/webp "access plus 1 year"
   ExpiresByType image/svg+xml "access plus 1 year"
   ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
   ExpiresByType application/pdf "access plus 7 days"
+  ExpiresByType application/xml "access plus 1 hour"
+  ExpiresByType text/plain "access plus 1 hour"
 </IfModule>
 
 <IfModule mod_headers.c>
-  <FilesMatch "\.(?:css|js|mjs|avif|webp|svg|png|jpg|jpeg|gif|woff2?)$">
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+
+  <FilesMatch "\.(?:css|js|mjs|woff2?)$">
     Header set Cache-Control "public, max-age=31536000, immutable"
   </FilesMatch>
 
-  <FilesMatch "\.(?:html)$">
-    Header set Cache-Control "no-cache"
+  <FilesMatch "\.(?:avif|webp|svg|png|jpg|jpeg|gif)$">
+    Header set Cache-Control "public, max-age=604800, must-revalidate"
   </FilesMatch>
 
-  <FilesMatch "\.(?:pdf)$">
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+  </FilesMatch>
+
+  <FilesMatch "^(?:robots\.txt|sitemap\.xml|llms\.txt)$">
+    Header set Cache-Control "public, max-age=3600, must-revalidate"
+  </FilesMatch>
+
+  <FilesMatch "\.pdf$">
     Header set Cache-Control "public, max-age=604800"
   </FilesMatch>
 </IfModule>
+

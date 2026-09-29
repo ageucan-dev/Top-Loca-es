@@ -5,6 +5,8 @@
   var PHONE_ERROR_ID = "cro-whatsapp-error";
   var PHONE_ERROR_TEXT = "Informe um WhatsApp válido com DDD.";
   var scheduled = false;
+  var rootObserver = null;
+  var enhancedRouteRoot = null;
 
   function pushEvent(eventName, details) {
     window.dataLayer = window.dataLayer || [];
@@ -171,8 +173,7 @@
     input.removeAttribute("aria-invalid");
     input.removeAttribute("aria-describedby");
 
-    var error = field.querySelector(".cro-phone-error");
-    if (error) error.remove();
+    input.setCustomValidity("");
   }
 
   function showPhoneError(input) {
@@ -183,14 +184,7 @@
     input.setAttribute("aria-invalid", "true");
     input.setAttribute("aria-describedby", PHONE_ERROR_ID);
 
-    var error = field.querySelector(".cro-phone-error");
-    if (!error) {
-      error = document.createElement("p");
-      error.id = PHONE_ERROR_ID;
-      error.className = "product-form__error cro-phone-error";
-      field.appendChild(error);
-    }
-    error.textContent = PHONE_ERROR_TEXT;
+    input.setCustomValidity(PHONE_ERROR_TEXT);
   }
 
   function syncPhoneInput(input, dispatchInput) {
@@ -213,21 +207,7 @@
     field.classList.add("cro-phone-field");
     input.classList.add("cro-phone-input");
 
-    var selector = field.querySelector(".cro-phone-country");
-    if (!selector) {
-      selector = document.createElement("select");
-      selector.className = "cro-phone-country";
-      selector.setAttribute("aria-label", "País e código telefônico");
-      selector.setAttribute("title", "Brasil (+55)");
-
-      var option = document.createElement("option");
-      option.value = "+55";
-      option.textContent = "Brasil +55";
-      option.selected = true;
-      selector.appendChild(option);
-
-      field.insertBefore(selector, input);
-    }
+    field.setAttribute("data-cro-phone-prefix", "Brasil +55");
   }
 
   function trackInvalidPhoneOnce(input, source) {
@@ -365,20 +345,36 @@
   }
 
   function sanitizeThankYouWhatsAppTracking() {
-    if (window.location.pathname !== "/obrigado") return;
+    return;
+  }
 
-    var link = document.querySelector(".cro-whatsapp-cta");
-    if (!link || link.dataset.croPrivacySanitized === CRO_VERSION) return;
+  function getRouteRoot() {
+    var path = window.location.pathname.replace(/\/+$/, "") || "/";
+    var selectors = {
+      "/": ".home",
+      "/balancim-eletrico": ".produto-eletrico",
+      "/balancim-manual": ".produto-manual",
+      "/obrigado": ".thank-you",
+    };
 
-    // Clonar remove o listener antigo que enviava o número no dataLayer.
-    var clone = link.cloneNode(true);
-    clone.dataset.croPrivacySanitized = CRO_VERSION;
-    clone.addEventListener("click", function () {
-      pushEvent("cro_whatsapp_click", {
-        cta_location: "thank_you",
-      });
+    return document.querySelector(selectors[path] || "#root > .layout");
+  }
+
+  function stopRootObserver() {
+    if (!rootObserver) return;
+    rootObserver.disconnect();
+    rootObserver = null;
+  }
+
+  function observeRootUntilReady() {
+    var root = document.querySelector("#root");
+    if (!root || rootObserver) return;
+
+    rootObserver = new MutationObserver(scheduleEnhance);
+    rootObserver.observe(root, {
+      childList: true,
+      subtree: true,
     });
-    link.replaceWith(clone);
   }
 
   // Proteção temporária: se o CTA for clicado no intervalo entre a criação pelo
@@ -402,9 +398,21 @@
 
   function enhance() {
     scheduled = false;
+    var routeRoot = getRouteRoot();
+    if (!routeRoot) {
+      observeRootUntilReady();
+      return;
+    }
+    if (enhancedRouteRoot === routeRoot) {
+      stopRootObserver();
+      return;
+    }
+
     enhanceHeroPaths();
     enhancePhoneField();
     sanitizeThankYouWhatsAppTracking();
+    enhancedRouteRoot = routeRoot;
+    stopRootObserver();
   }
 
   function scheduleEnhance() {
@@ -413,16 +421,28 @@
     window.requestAnimationFrame(enhance);
   }
 
-  window.addEventListener("pageshow", scheduleEnhance);
-  window.addEventListener("popstate", scheduleEnhance);
-
-  var root = document.querySelector("#root");
-  if (root) {
-    new MutationObserver(scheduleEnhance).observe(root, {
-      childList: true,
-      subtree: true,
-    });
+  function handleRouteChange() {
+    enhancedRouteRoot = null;
+    observeRootUntilReady();
+    scheduleEnhance();
   }
 
+  ["pushState", "replaceState"].forEach(function (methodName) {
+    var original = window.history[methodName];
+    window.history[methodName] = function () {
+      var result = original.apply(this, arguments);
+      handleRouteChange();
+      return result;
+    };
+  });
+
+  window.addEventListener("pageshow", function () {
+    observeRootUntilReady();
+    scheduleEnhance();
+  });
+  window.addEventListener("popstate", handleRouteChange);
+
+  observeRootUntilReady();
   scheduleEnhance();
 })();
+

@@ -8,6 +8,147 @@
   scroll-margin-top: 7.5rem;
 }
 
+/* Mantém uma única rolagem: a da janela. O overflow-x:hidden do bundle
+   transformava o body em um segundo contêiner vertical em alguns navegadores. */
+html {
+  height: auto;
+  min-height: 100%;
+  overflow-x: clip;
+  overflow-y: auto;
+}
+
+body {
+  height: auto;
+  min-height: 100%;
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
+/* O título principal já contextualiza o serviço; remove o selo redundante do hero. */
+.home-hero__badge { display: none !important; }
+
+/* Qualificação progressiva antes do WhatsApp. */
+body.cro-lead-modal-open { overflow: hidden; }
+
+.cro-lead-modal[hidden],
+.cro-lead-step[hidden] { display: none !important; }
+
+.cro-lead-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+
+.cro-lead-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.7);
+}
+
+.cro-lead-modal__dialog {
+  position: relative;
+  width: min(100%, 34rem);
+  max-height: min(92vh, 44rem);
+  overflow-y: auto;
+  padding: clamp(1.35rem, 4vw, 2.25rem);
+  color: #161616;
+  background: #fff;
+  border: 1px solid rgba(22, 22, 22, 0.1);
+  border-radius: 1.4rem;
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.35);
+}
+
+.cro-lead-modal__close {
+  position: absolute;
+  top: 0.8rem;
+  right: 0.9rem;
+  width: 2.4rem;
+  height: 2.4rem;
+  padding: 0;
+  color: #303030;
+  background: #f2f3f4;
+  border: 0;
+  border-radius: 50%;
+  font-size: 1.65rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.cro-lead-modal__progress {
+  width: 100%;
+  height: 0.32rem;
+  margin: 0 0 1.35rem;
+  overflow: hidden;
+  background: #e5e6e8;
+  border-radius: 99px;
+}
+
+.cro-lead-modal__progress span {
+  display: block;
+  height: 100%;
+  background: #f5c400;
+  border-radius: inherit;
+  transition: width 220ms ease;
+}
+
+.cro-lead-modal h2 { margin: 0 0 0.65rem; color: #161616; font-size: clamp(1.55rem, 5vw, 2.15rem); line-height: 1.08; }
+.cro-lead-modal p { margin: 0 0 0.8rem; color: #62656a; line-height: 1.55; }
+
+.cro-lead-options { display: grid; gap: 0.7rem; }
+.cro-lead-options button {
+  display: grid;
+  gap: 0.2rem;
+  width: 100%;
+  padding: 1rem 1.1rem;
+  color: #161616;
+  text-align: left;
+  background: #f7f8f8;
+  border: 1px solid rgba(22, 22, 22, 0.1);
+  border-radius: 0.9rem;
+  cursor: pointer;
+  transition: border-color 160ms ease, transform 160ms ease, background 160ms ease;
+}
+.cro-lead-options button:hover,
+.cro-lead-options button:focus-visible { background: #fff9df; border-color: #d9aa00; transform: translateY(-1px); }
+.cro-lead-options strong { font-size: 1rem; }
+.cro-lead-options span { color: #696c70; font-size: 0.84rem; }
+
+.cro-lead-field { display: grid; gap: 0.45rem; }
+.cro-lead-field > span { color: #303236; font-size: 0.82rem; font-weight: 750; }
+.cro-lead-field input {
+  width: 100%;
+  min-height: 3.35rem;
+  padding: 0.8rem 0.95rem;
+  color: #161616;
+  background: #fff;
+  border: 1px solid #cfd1d4;
+  border-radius: 0.75rem;
+  font: inherit;
+}
+.cro-lead-field input:focus { outline: 3px solid rgba(245, 196, 0, 0.28); border-color: #a98000; }
+
+.cro-lead-consent { display: flex; gap: 0.65rem; margin-top: 1rem; color: #56595e; font-size: 0.78rem; line-height: 1.4; }
+.cro-lead-consent input { width: 1.1rem; height: 1.1rem; flex: 0 0 auto; margin-top: 0.08rem; accent-color: #128c43; }
+.cro-lead-consent a { color: #176c36; font-weight: 750; text-underline-offset: 2px; }
+.cro-lead-modal__error { min-height: 1.25rem; margin-top: 0.55rem; color: #aa1d1d; font-size: 0.78rem; font-weight: 650; }
+
+.cro-lead-modal__actions { display: grid; grid-template-columns: auto 1fr; gap: 0.7rem; margin-top: 0.8rem; }
+.cro-lead-modal__actions button { min-height: 3.1rem; padding: 0.75rem 1rem; border-radius: 0.75rem; font-weight: 800; cursor: pointer; }
+.cro-lead-back { color: #444; background: #f1f2f3; border: 0; }
+.cro-lead-next,
+.cro-lead-finish { color: #fff; background: #128c43; border: 1px solid #128c43; box-shadow: 0 8px 20px rgba(18, 140, 67, 0.2); }
+.cro-lead-skip { display: block; margin: 1rem auto 0; padding: 0.4rem; color: #666; background: transparent; border: 0; font-size: 0.78rem; text-decoration: underline; cursor: pointer; }
+
+@media (max-width: 520px) {
+  .cro-lead-modal { align-items: end; padding: 0; }
+  .cro-lead-modal__dialog { width: 100%; max-height: 92vh; padding: 1.35rem 1rem calc(1.25rem + env(safe-area-inset-bottom, 0px)); border-radius: 1.25rem 1.25rem 0 0; }
+  .cro-lead-modal__progress { margin-bottom: 1.15rem; }
+  .cro-lead-options button { padding: 0.85rem 0.9rem; }
+}
+
 .cro-sr-only {
   position: absolute !important;
   width: 1px !important;
@@ -469,3 +610,912 @@
   flex: 0 0 auto;
   object-fit: contain;
 }
+
+/* CRO v3 — experiência clara, conversão principal pelo WhatsApp e movimento leve. */
+:root {
+  --cro-ink: #161616;
+  --cro-muted: #5f6268;
+  --cro-surface: #ffffff;
+  --cro-soft: #f5f6f7;
+  --cro-yellow: #f5c400;
+  --cro-yellow-dark: #d6a900;
+  --cro-whatsapp: #16a34a;
+  --cro-whatsapp-dark: #11813b;
+  --cro-shadow: 0 18px 50px rgba(20, 20, 20, 0.09);
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--cro-surface);
+}
+
+body.cro-v3-ready,
+.cro-v3-ready #root,
+.cro-v3-ready .layout,
+.cro-v3-ready main,
+.cro-v3-ready .home {
+  color: var(--cro-ink);
+  background: var(--cro-surface);
+}
+
+body.cro-v3-ready {
+  padding-bottom: 0 !important;
+}
+
+.cro-v3-ready .site-header,
+.cro-v3-ready .header {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-bottom: 1px solid rgba(22, 22, 22, 0.08) !important;
+  box-shadow: 0 8px 30px rgba(20, 20, 20, 0.05);
+  backdrop-filter: blur(12px);
+}
+
+.cro-v3-ready .site-header img[alt*="Top"],
+.cro-v3-ready .site-header__logo img,
+.cro-v3-ready .header__logo img,
+.cro-v3-ready .header .logo-image {
+  filter: invert(1);
+}
+
+.cro-v3-ready .site-header a,
+.cro-v3-ready .site-header button,
+.cro-v3-ready .header a,
+.cro-v3-ready .header button {
+  color: var(--cro-ink);
+}
+
+.cro-v3-ready .header a.active,
+.cro-v3-ready .site-header a.active {
+  color: #fff !important;
+  background: var(--cro-ink) !important;
+}
+
+.cro-v3-ready .cro-hero-image-action,
+.cro-v3-ready .cro-product-image-action {
+  color: transparent !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.cro-v3-ready .promo-bar {
+  position: relative;
+  z-index: 20;
+  overflow: hidden;
+  padding: 0 !important;
+  color: #fff;
+  background: #151515 !important;
+  border: 0 !important;
+  cursor: pointer;
+}
+
+.cro-v3-ready .promo-bar__inner {
+  width: 100%;
+  max-width: none !important;
+  padding: 0 !important;
+}
+
+.cro-ticker {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.cro-ticker-source {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  white-space: nowrap !important;
+}
+
+.cro-ticker__track {
+  display: flex;
+  width: max-content;
+  animation: cro-ticker 26s linear infinite;
+  will-change: transform;
+}
+
+.cro-ticker__group {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-evenly;
+  flex: 0 0 auto;
+  width: max-content;
+  min-width: 100vw;
+  padding: 0.72rem 1.25rem;
+  gap: clamp(1rem, 2.8vw, 2.75rem);
+}
+
+.cro-ticker__item {
+  font-size: clamp(0.78rem, 2vw, 0.94rem);
+  font-weight: 750;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.cro-ticker__dot {
+  color: var(--cro-yellow);
+  font-size: 1.15rem;
+  line-height: 1;
+  flex: 0 0 auto;
+}
+
+.promo-bar:hover .cro-ticker__track,
+.promo-bar:focus-visible .cro-ticker__track {
+  animation-play-state: paused;
+}
+
+@keyframes cro-ticker {
+  to { transform: translateX(-50%); }
+}
+
+.cro-v3-ready .home {
+  display: flex;
+  flex-direction: column;
+}
+
+.cro-v3-ready .home > .home-hero { order: 1; }
+.cro-v3-ready .home > .product-selection { order: 2; }
+.cro-v3-ready .home > #product-form { order: 3; }
+.cro-v3-ready .home > .social-proof-section { order: 4; }
+.cro-v3-ready .home > .value-section { order: 5; }
+.cro-v3-ready .home > .differentials-section { order: 6; }
+.cro-v3-ready .home > .benefits-section { order: 7; }
+.cro-v3-ready .home > .product-faq { order: 8; }
+.cro-v3-ready .home > .home-seo { order: 9; }
+.cro-v3-ready .cro-trust { display: none !important; }
+
+.cro-v3-ready .home-hero,
+.cro-v3-ready .product-hero {
+  color: var(--cro-ink) !important;
+  background: linear-gradient(180deg, #fff 0%, #f7f7f5 100%) !important;
+}
+
+.cro-v3-ready .home-hero__title,
+.cro-v3-ready .product-hero__title,
+.cro-v3-ready h1,
+.cro-v3-ready h2,
+.cro-v3-ready h3 {
+  color: var(--cro-ink) !important;
+}
+
+.cro-v3-ready .home-hero__description,
+.cro-v3-ready .product-hero__description,
+.cro-v3-ready section p {
+  color: var(--cro-muted);
+}
+
+.cro-v3-ready .product-hero__trust-item {
+  color: var(--cro-muted) !important;
+}
+
+.cro-v3-ready .product-hero__trust-icon {
+  color: #8a6800 !important;
+  background: rgba(245, 196, 0, 0.18) !important;
+}
+
+.cro-v3-ready .home-hero__title {
+  display: grid;
+  align-items: center;
+  min-height: 3.3em;
+  cursor: default !important;
+}
+
+.cro-v3-ready .home-hero__title.cro-headline-rotator {
+  position: relative;
+  color: transparent !important;
+}
+
+.cro-v3-ready .home-hero__title.cro-headline-rotator::after {
+  content: attr(data-cro-headline);
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-items: center;
+  color: var(--cro-ink);
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 240ms ease, transform 240ms ease;
+}
+
+.cro-v3-ready .home-hero__title.cro-headline-rotator.is-changing::after {
+  opacity: 0;
+  transform: translateY(0.35em);
+}
+
+.cro-headline {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 240ms ease, transform 240ms ease;
+}
+
+.cro-headline.is-changing {
+  opacity: 0;
+  transform: translateY(0.35em);
+}
+
+.cro-v3-ready .cro-cta-relabel {
+  font-size: 0 !important;
+}
+
+.cro-v3-ready .cro-cta-relabel::after {
+  content: "Falar no WhatsApp";
+  font-size: 0.95rem;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+
+.cro-v3-ready .home-hero__image-container {
+  border-radius: 1.35rem;
+  box-shadow: var(--cro-shadow);
+  transform: rotate(0.5deg);
+  transition: transform 350ms ease, box-shadow 350ms ease;
+}
+
+.cro-v3-ready .home-hero__image-container:hover {
+  transform: translateY(-5px) rotate(0deg);
+  box-shadow: 0 24px 70px rgba(20, 20, 20, 0.14);
+}
+
+.cro-v3-ready .home-hero__image {
+  border-radius: 1.35rem;
+}
+
+/* O conteúdo acima da dobra deve aparecer na primeira pintura, sem atrasar a LCP. */
+.cro-v3-ready .home-hero__title,
+.cro-v3-ready .home-hero__subtitle,
+.cro-v3-ready .home-hero__microbenefits,
+.cro-v3-ready .home-hero__actions,
+.cro-v3-ready .home-hero__micro-proof,
+.cro-v3-ready .home-hero__image-container {
+  animation: none !important;
+}
+
+.cro-v3-ready section:not(.home-hero):not(.promo-bar) {
+  color: var(--cro-ink);
+  background-color: var(--cro-surface);
+}
+
+.cro-v3-ready .product-card,
+.cro-v3-ready .application-card,
+.cro-v3-ready .benefit-card,
+.cro-v3-ready .differential-card,
+.cro-v3-ready .value-card,
+.cro-v3-ready .product-form__card {
+  color: var(--cro-ink) !important;
+  background: #fff !important;
+  border: 1px solid rgba(22, 22, 22, 0.09) !important;
+  box-shadow: var(--cro-shadow) !important;
+  transition: transform 260ms ease, box-shadow 260ms ease, border-color 260ms ease;
+}
+
+.cro-v3-ready .product-card:hover,
+.cro-v3-ready .application-card:hover,
+.cro-v3-ready .benefit-card:hover,
+.cro-v3-ready .differential-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(245, 196, 0, 0.65) !important;
+  box-shadow: 0 22px 56px rgba(20, 20, 20, 0.13) !important;
+}
+
+.cro-v3-ready .btn-primary,
+.cro-v3-ready .cro-whatsapp-primary {
+  color: #fff !important;
+  background: var(--cro-whatsapp) !important;
+  border-color: var(--cro-whatsapp) !important;
+  box-shadow: 0 12px 28px rgba(22, 163, 74, 0.25) !important;
+}
+
+.cro-v3-ready .btn-primary:hover,
+.cro-v3-ready .cro-whatsapp-primary:hover {
+  color: #fff !important;
+  background: var(--cro-whatsapp-dark) !important;
+  border-color: var(--cro-whatsapp-dark) !important;
+  transform: translateY(-2px);
+}
+
+.cro-v3-ready .btn-secondary {
+  color: var(--cro-ink) !important;
+  background: transparent !important;
+  border-color: rgba(22, 22, 22, 0.25) !important;
+}
+
+.cro-v3-ready .cro-secondary-conversion {
+  background: var(--cro-soft) !important;
+  border-block: 1px solid rgba(22, 22, 22, 0.07);
+}
+
+.cro-v3-ready .cro-secondary-conversion::before {
+  content: "Alternativa ao WhatsApp";
+  display: block;
+  width: max-content;
+  margin: 0 auto 0.85rem;
+  padding: 0.35rem 0.7rem;
+  color: #725900;
+  background: rgba(245, 196, 0, 0.22);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.cro-v3-ready .product-form__input,
+.cro-v3-ready .product-form__select,
+.cro-v3-ready .product-form__textarea {
+  color: var(--cro-ink) !important;
+  background: #fff !important;
+  border-color: rgba(22, 22, 22, 0.2) !important;
+}
+
+.cro-v3-ready .product-form__input:focus,
+.cro-v3-ready .product-form__select:focus,
+.cro-v3-ready .product-form__textarea:focus {
+  border-color: var(--cro-yellow-dark) !important;
+  box-shadow: 0 0 0 3px rgba(245, 196, 0, 0.18) !important;
+}
+
+.cro-whatsapp-float {
+  position: fixed;
+  right: clamp(1rem, 3vw, 2rem);
+  bottom: clamp(1rem, 3vw, 2rem);
+  z-index: 999;
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  padding: 12px;
+  color: #fff !important;
+  background: #16a34a;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 8px 22px rgba(22, 163, 74, 0.3);
+  text-decoration: none;
+  transition: transform 220ms ease, box-shadow 220ms ease;
+}
+
+.cro-whatsapp-float svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  flex: 0 0 auto;
+}
+
+.cro-whatsapp-float span { display: none; }
+
+.cro-whatsapp-float:hover {
+  color: #fff;
+  transform: translateY(-3px) scale(1.04);
+  box-shadow: 0 12px 26px rgba(22, 163, 74, 0.36);
+}
+
+.cro-whatsapp-float:focus-visible,
+.cro-v3-ready a:focus-visible,
+.cro-v3-ready button:focus-visible {
+  outline: 3px solid var(--cro-yellow);
+  outline-offset: 3px;
+}
+
+.cro-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 560ms ease, transform 560ms ease;
+}
+
+.cro-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Integração do campo internacional, sem uma segunda folha bloqueante. */
+.product-form__field.cro-phone-field { position: relative; }
+.cro-phone-field .cro-phone-input { min-height: 3rem; padding-left: 8.35rem !important; }
+.cro-phone-field::before {
+  content: attr(data-cro-phone-prefix);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  width: 7.85rem;
+  height: 3rem;
+  padding: 0 0.55rem;
+  color: var(--cro-ink);
+  border-right: 1px solid rgba(22, 22, 22, 0.15);
+  font-size: 0.86rem;
+  font-weight: 650;
+  pointer-events: none;
+}
+.cro-phone-field--invalid::after {
+  content: "Informe um WhatsApp válido com DDD.";
+  display: block;
+  margin-top: 0.45rem;
+  color: #a11919;
+  font-size: 0.85rem;
+}
+.cro-phone-country {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 4;
+  width: 7.85rem;
+  height: 3rem;
+  padding: 0 0.55rem;
+  color: var(--cro-ink);
+  background: transparent;
+  border: 0;
+  border-right: 1px solid rgba(22, 22, 22, 0.15);
+  font-size: 0.86rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+.cro-phone-country:focus-visible { outline: 2px solid var(--cro-yellow-dark); outline-offset: -2px; }
+.cro-phone-country option { color: #111; background: #fff; }
+.cro-phone-field--invalid .cro-phone-input { border-color: #c62828 !important; background-color: rgba(198, 40, 40, 0.04) !important; }
+.cro-phone-field--invalid .cro-phone-country { border-right-color: rgba(198, 40, 40, 0.55); }
+.cro-phone-error { margin-top: 0.45rem !important; color: #a11919 !important; }
+
+@media (max-width: 700px) {
+  .cro-ticker__track { animation-duration: 22s; }
+  .cro-ticker__group { padding-inline: 1rem; gap: 1.15rem; }
+  .cro-v3-ready .home-hero__title { min-height: 4.2em; }
+  .cro-whatsapp-float { width: 56px; height: 56px; padding: 11px; }
+}
+
+@media (max-width: 380px) {
+  .cro-phone-field .cro-phone-input { padding-left: 7.75rem !important; }
+  .cro-phone-country { width: 7.25rem; padding-inline: 0.4rem; font-size: 0.8rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .cro-ticker__track { animation: none; transform: none; }
+  .cro-ticker__group[aria-hidden="true"] { display: none; }
+  .cro-headline,
+  .cro-reveal,
+  .cro-v3-ready .product-card,
+  .cro-whatsapp-float { transition: none !important; transform: none !important; }
+}
+
+/* CRO v4 — consolidação do tema claro e contraste de todos os conteúdos. */
+body.cro-v3-ready {
+  --bg: #ffffff;
+  --bg-alt: #f5f6f7;
+  --surface: #ffffff;
+  --text: #161616;
+  --text-secondary: #5f6268;
+  --text-muted: #74777d;
+}
+
+.cro-v3-ready .value-accordion__item {
+  border-color: rgba(22, 22, 22, 0.12) !important;
+}
+
+.cro-v3-ready .value-accordion__item:first-child {
+  border-top-color: rgba(22, 22, 22, 0.12) !important;
+}
+
+.cro-v3-ready .value-accordion__trigger:hover {
+  background: rgba(245, 196, 0, 0.08) !important;
+}
+
+.cro-v3-ready .value-accordion__title,
+.cro-v3-ready .feature-item__text,
+.cro-v3-ready .application-card__title {
+  color: var(--cro-ink) !important;
+}
+
+.cro-v3-ready .value-accordion__description,
+.cro-v3-ready .application-card__description {
+  color: var(--cro-muted) !important;
+}
+
+.cro-v3-ready .value-accordion__trigger.cro-whatsapp-primary .value-accordion__title {
+  color: #fff !important;
+}
+
+.cro-v3-ready .differential-item {
+  color: var(--cro-ink) !important;
+  background: #fff !important;
+  border: 1px solid rgba(22, 22, 22, 0.09) !important;
+  box-shadow: 0 16px 38px rgba(20, 20, 20, 0.08) !important;
+}
+
+.cro-v3-ready .differential-item:hover {
+  border-color: rgba(245, 196, 0, 0.7) !important;
+  box-shadow: 0 20px 46px rgba(20, 20, 20, 0.12) !important;
+}
+
+.cro-v3-ready .differential-item__title {
+  color: var(--cro-ink) !important;
+}
+
+.cro-v3-ready .differential-item__description {
+  color: var(--cro-muted) !important;
+}
+
+.cro-v3-ready .home-seo {
+  color: var(--cro-ink) !important;
+  background: #fff !important;
+  border-top: 1px solid rgba(22, 22, 22, 0.07);
+}
+
+.cro-v3-ready .home-seo::before {
+  opacity: 0 !important;
+}
+
+.cro-v3-ready .home-seo__eyebrow {
+  color: #785d00 !important;
+}
+
+.cro-v3-ready .home-seo__text p {
+  color: var(--cro-muted) !important;
+}
+
+.cro-v3-ready .home-seo__link {
+  color: var(--cro-ink) !important;
+  background: #fff !important;
+  border: 1px solid rgba(22, 22, 22, 0.14) !important;
+  border-radius: 0.8rem;
+  box-shadow: 0 8px 24px rgba(20, 20, 20, 0.06);
+}
+
+.cro-v3-ready .home-seo__link:hover {
+  color: var(--cro-ink) !important;
+  border-color: var(--cro-yellow-dark) !important;
+  background: rgba(245, 196, 0, 0.08) !important;
+}
+
+.cro-v3-ready .testimonial-card-main {
+  color: var(--cro-ink) !important;
+  background: linear-gradient(145deg, #fff, #faf9f4) !important;
+  border: 1px solid rgba(22, 22, 22, 0.1) !important;
+  box-shadow: 0 18px 46px rgba(20, 20, 20, 0.1) !important;
+}
+
+.cro-v3-ready .testimonial-author__name,
+.cro-v3-ready .testimonial-card-main__text {
+  color: var(--cro-ink) !important;
+}
+
+.cro-v3-ready .testimonial-author__reviews,
+.cro-v3-ready .testimonial-author__date,
+.cro-v3-ready .testimonial-verified-text {
+  color: var(--cro-muted) !important;
+}
+
+.cro-v3-ready .testimonial-card-main__divider {
+  background: rgba(22, 22, 22, 0.1) !important;
+}
+
+.cro-v3-ready .product-seo-details {
+  color: var(--cro-ink) !important;
+  background: #fff !important;
+}
+
+.cro-v3-ready .product-seo-details::before {
+  opacity: 0.22 !important;
+  background-image:
+    linear-gradient(rgba(22, 22, 22, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(22, 22, 22, 0.04) 1px, transparent 1px) !important;
+}
+
+.cro-v3-ready .product-seo-details__group,
+.cro-v3-ready .product-seo-details__group--application,
+.cro-v3-ready .product-seo-details__group--capacity,
+.cro-v3-ready .product-seo-details__group--differentials,
+.cro-v3-ready .product-seo-details__group--included,
+.cro-v3-ready .product-seo-details__group--excluded,
+.cro-v3-ready .product-seo-details__group--conditions {
+  color: var(--cro-ink) !important;
+  background: rgba(255, 255, 255, 0.96) !important;
+  border: 1px solid rgba(22, 22, 22, 0.09) !important;
+  box-shadow: 0 16px 40px rgba(20, 20, 20, 0.08) !important;
+}
+
+.cro-v3-ready .product-seo-details__group:hover {
+  border-color: rgba(245, 196, 0, 0.7) !important;
+  box-shadow: 0 21px 48px rgba(20, 20, 20, 0.12) !important;
+}
+
+.cro-v3-ready .product-seo-details__group-title {
+  color: var(--cro-ink) !important;
+}
+
+.cro-v3-ready .product-seo-details__list {
+  color: var(--cro-muted) !important;
+}
+
+/* Estes dois blocos permanecem escuros por decisão visual. */
+.cro-v3-ready .benefits-list {
+  color: #fff !important;
+  background: linear-gradient(135deg, #292929, #1c1c1c) !important;
+  border: 1px solid rgba(245, 196, 0, 0.18) !important;
+  box-shadow: 0 18px 42px rgba(20, 20, 20, 0.18) !important;
+}
+
+.cro-v3-ready .benefit-item,
+.cro-v3-ready .benefit-item__text {
+  color: #fff !important;
+}
+
+.cro-v3-ready .benefit-item__icon {
+  color: var(--cro-yellow) !important;
+}
+
+.cro-v3-ready .faq-item {
+  color: #fff !important;
+  background: #242424 !important;
+  border: 1px solid rgba(245, 196, 0, 0.15) !important;
+  box-shadow: 0 8px 22px rgba(20, 20, 20, 0.1);
+}
+
+.cro-v3-ready .faq-question,
+.cro-v3-ready .faq-question__text {
+  color: #fff !important;
+}
+
+.cro-v3-ready .faq-question:hover,
+.cro-v3-ready .faq-question:focus-visible,
+.cro-v3-ready .faq-question.active {
+  color: #fff !important;
+  background: #303030 !important;
+}
+
+.cro-v3-ready .faq-question.active {
+  border-bottom-color: rgba(245, 196, 0, 0.18) !important;
+}
+
+.cro-v3-ready .faq-answer p {
+  color: #d6d6d6 !important;
+}
+
+/* Rodapé limpo: uma única superfície branca, sem efeito de caixas empilhadas. */
+.cro-v3-ready .site-footer {
+  min-height: 0;
+  padding-top: clamp(2.5rem, 6vw, 4.5rem);
+  color: var(--cro-ink) !important;
+  background: #fff !important;
+  border-top: 1px solid #e6e8eb !important;
+}
+
+.cro-v3-ready .site-footer__content {
+  grid-template-columns: 1fr;
+  gap: 1.75rem;
+  width: min(1180px, calc(100% - 2rem));
+  padding-bottom: 1.5rem;
+}
+
+.cro-v3-ready .site-footer__title {
+  margin-bottom: 1.25rem !important;
+  color: var(--cro-ink) !important;
+  text-align: left;
+}
+
+.cro-v3-ready .site-footer__contact-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.cro-v3-ready .site-footer__contact-item {
+  min-height: 9rem;
+  padding: 1.25rem;
+  color: var(--cro-ink) !important;
+  background: transparent;
+  border: 0 !important;
+  border-top: 1px solid #e6e8eb !important;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.cro-v3-ready .site-footer__item-icon {
+  color: #8a6800 !important;
+}
+
+.cro-v3-ready .site-footer__item-title {
+  color: var(--cro-ink) !important;
+}
+
+.cro-v3-ready .site-footer__item-description,
+.cro-v3-ready .site-footer__item-link {
+  color: #48515a !important;
+  font-weight: 500;
+}
+
+.cro-v3-ready .site-footer__item-link:hover {
+  color: var(--cro-ink) !important;
+}
+
+.cro-v3-ready .site-footer__item-link.cro-whatsapp-primary {
+  display: inline-flex;
+  width: auto;
+  min-height: 2.4rem;
+  padding: 0.45rem 0.75rem;
+  color: #fff !important;
+  border-radius: 999px;
+}
+
+/* Exibe somente o número oficial sem reescrever nós controlados pelo React. */
+.cro-v3-ready .site-footer__contact-item:nth-child(2) .site-footer__item-link.cro-whatsapp-primary {
+  font-size: 0 !important;
+}
+
+.cro-v3-ready .site-footer__contact-item:nth-child(2) .site-footer__item-link.cro-whatsapp-primary::after {
+  content: "(16) 99263-1992";
+  font-size: 0.86rem;
+}
+
+.cro-v3-ready .site-footer__section--social {
+  max-width: none;
+  padding: 1.5rem 0 0;
+  background: transparent;
+  border: 0;
+  border-top: 1px solid #e6e8eb;
+  border-radius: 0;
+  box-shadow: none;
+  justify-self: stretch;
+}
+
+.cro-v3-ready .site-footer__section--social .site-footer__title {
+  margin-bottom: 0 !important;
+  text-align: center;
+}
+
+.cro-v3-ready .site-footer__social-divider {
+  margin-inline: auto;
+  background: var(--cro-yellow-dark);
+}
+
+.cro-v3-ready .site-footer__social-links {
+  justify-content: center;
+}
+
+.cro-v3-ready .site-footer__social-link {
+  color: var(--cro-ink) !important;
+  background: #fff !important;
+  border-color: rgba(22, 22, 22, 0.14) !important;
+  box-shadow: 0 7px 20px rgba(20, 20, 20, 0.06);
+}
+
+.cro-v3-ready .site-footer__social-link.cro-whatsapp-primary {
+  color: #fff !important;
+  background: var(--cro-whatsapp) !important;
+  border-color: var(--cro-whatsapp) !important;
+}
+
+.cro-v3-ready .site-footer__bottom {
+  color: rgba(255, 255, 255, 0.92) !important;
+  background: #17191c !important;
+  border-top: 1px solid #30343a !important;
+}
+
+.cro-v3-ready .site-footer__bottom p {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-weight: 500;
+}
+
+.cro-v3-ready .cro-footer-privacy {
+  display: inline-block;
+  margin-top: 0.45rem;
+  color: #f5c400;
+  font-size: 0.8rem;
+  font-weight: 650;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.cro-v3-ready .cro-footer-privacy:hover,
+.cro-v3-ready .cro-footer-privacy:focus-visible {
+  color: #fff3ae;
+}
+
+.cro-whatsapp-float.is-footer-visible {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(1rem) scale(0.92);
+}
+
+@media (max-width: 900px) {
+  .cro-v3-ready .site-footer__contact-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .cro-v3-ready .site-footer {
+    padding-top: 2.25rem;
+  }
+
+  .cro-v3-ready .site-footer__content {
+    width: min(100% - 1.25rem, 34rem);
+    gap: 1.5rem;
+    padding-bottom: 2rem;
+  }
+
+  .cro-v3-ready .site-footer__section--contact .site-footer__title {
+    margin-bottom: 1rem !important;
+    font-size: 1.3rem;
+    letter-spacing: 0.05em;
+  }
+
+  .cro-v3-ready .site-footer__contact-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+  }
+
+  .cro-v3-ready .site-footer__contact-item {
+    min-height: 7.3rem;
+    padding: 0.9rem 0.65rem;
+  }
+
+  .cro-v3-ready .site-footer__contact-item:first-child,
+  .cro-v3-ready .site-footer__contact-item:last-child {
+    grid-column: 1 / -1;
+    min-height: 6.5rem;
+  }
+
+  .cro-v3-ready .site-footer__item-title {
+    font-size: 0.72rem;
+  }
+
+  .cro-v3-ready .site-footer__item-description,
+  .cro-v3-ready .site-footer__item-link {
+    font-size: 0.82rem;
+    line-height: 1.4;
+  }
+
+  .cro-v3-ready .site-footer__contact-item:nth-child(3) .site-footer__item-link {
+    white-space: nowrap;
+    font-size: clamp(0.65rem, 2.8vw, 0.75rem);
+    letter-spacing: -0.02em;
+  }
+
+  .cro-v3-ready .site-footer__bottom {
+    padding: 1rem;
+    text-align: center;
+  }
+
+  .cro-v3-ready .site-footer__bottom p {
+    font-size: 0.78rem;
+    line-height: 1.4;
+  }
+
+  .cro-v3-ready .site-footer__section--social {
+    padding: 1.25rem 0 0;
+  }
+
+  .cro-v3-ready .site-footer__social-divider {
+    margin-bottom: 0.8rem;
+  }
+}
+
+/* Mantém a profundidade do fundo sem as brumas amarelo-alaranjadas. */
+.cro-v3-ready .site-bg::after {
+  background:
+    radial-gradient(120% 90% at 50% 34%, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.16) 44%, rgba(0, 0, 0, 0.44) 100%),
+    radial-gradient(150% 120%, transparent 56%, rgba(0, 0, 0, 0.12) 100%) !important;
+}
+
+/* Navegação móvel legível sobre o cabeçalho claro. */
+@media (max-width: 768px) {
+  .cro-v3-ready .nav-toggle span {
+    background: var(--cro-ink) !important;
+  }
+
+  .cro-v3-ready .nav-list {
+    color: var(--cro-ink) !important;
+    background: #fff !important;
+    border-top: 1px solid rgba(22, 22, 22, 0.08);
+    box-shadow: 0 18px 30px rgba(20, 20, 20, 0.12);
+  }
+
+  .cro-v3-ready .nav-list a,
+  .cro-v3-ready .nav-link {
+    color: var(--cro-ink) !important;
+  }
+}
+
