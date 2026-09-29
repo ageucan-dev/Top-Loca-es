@@ -385,15 +385,28 @@
   }
 
   function addWhatsAppFloat() {
-    if (document.querySelector(".cro-whatsapp-float")) return;
-    var link = document.createElement("a");
-    link.className = "cro-whatsapp-float";
-    link.href = whatsAppUrl(link);
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
-    link.setAttribute("aria-label", "Falar agora com a Top Locações no WhatsApp");
-    link.innerHTML = '<svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a8 8 0 0 1-11.8 7l-4.2 1 1.1-4a8 8 0 1 1 14.9-4Z"></path><path d="M9 8.8c.2 3 2.2 5.1 5.3 6"></path><path d="M9.2 8.7c.4-.5.7-.5 1-.2l.8 1c.2.3.2.6-.1.9l-.3.3c.5 1 1.3 1.8 2.3 2.3l.4-.4c.3-.3.6-.3.9-.1l1 .7c.3.2.4.6.2 1"></path></svg><span>Fale conosco</span>';
-    document.body.appendChild(link);
+    var link = document.querySelector(".cro-whatsapp-float");
+    if (!link) {
+      link = document.createElement("a");
+      link.className = "cro-whatsapp-float";
+      link.href = whatsAppUrl(link);
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.setAttribute("aria-label", "Falar agora com a Top Locações no WhatsApp");
+      link.innerHTML = '<svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a8 8 0 0 1-11.8 7l-4.2 1 1.1-4a8 8 0 1 1 14.9-4Z"></path><path d="M9 8.8c.2 3 2.2 5.1 5.3 6"></path><path d="M9.2 8.7c.4-.5.7-.5 1-.2l.8 1c.2.3.2.6-.1.9l-.3.3c.5 1 1.3 1.8 2.3 2.3l.4-.4c.3-.3.6-.3.9-.1l1 .7c.3.2.4.6.2 1"></path></svg><span>Fale conosco</span>';
+      document.body.appendChild(link);
+    }
+
+    var footer = document.querySelector(".site-footer");
+    if (footer && !link.dataset.croFooterObserver && "IntersectionObserver" in window) {
+      link.dataset.croFooterObserver = VERSION;
+      var footerObserver = new IntersectionObserver(function (entries) {
+        link.classList.toggle("is-footer-visible", entries.some(function (entry) {
+          return entry.isIntersecting;
+        }));
+      }, { threshold: 0.08 });
+      footerObserver.observe(footer);
+    }
   }
 
   function enhanceFormAsSecondary() {
@@ -522,6 +535,7 @@
     enhanceHeroTitle();
     enhanceCtas();
     addWhatsAppFloat();
+    window.setTimeout(addWhatsAppFloat, 300);
     enhanceFormAsSecondary();
     optimizeHeroImage();
     standardizeContact();
