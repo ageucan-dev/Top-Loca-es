@@ -1274,13 +1274,13 @@ body.cro-v3-ready {
   color: #d6d6d6 !important;
 }
 
-/* Rodapé claro, compacto e consistente com os cartões do site. */
+/* Rodapé limpo: uma única superfície branca, sem efeito de caixas empilhadas. */
 .cro-v3-ready .site-footer {
   min-height: 0;
   padding-top: clamp(2.5rem, 6vw, 4.5rem);
   color: var(--cro-ink) !important;
-  background: #edf0f3 !important;
-  border-top: 1px solid rgba(22, 22, 22, 0.14) !important;
+  background: #fff !important;
+  border-top: 1px solid #e6e8eb !important;
 }
 
 .cro-v3-ready .site-footer__content {
@@ -1305,10 +1305,11 @@ body.cro-v3-ready {
   min-height: 9rem;
   padding: 1.25rem;
   color: var(--cro-ink) !important;
-  background: #fff;
-  border: 1px solid #cfd6dd !important;
-  border-radius: 1rem;
-  box-shadow: 0 8px 20px rgba(20, 20, 20, 0.08);
+  background: transparent;
+  border: 0 !important;
+  border-top: 1px solid #e6e8eb !important;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .cro-v3-ready .site-footer__item-icon {
@@ -1350,11 +1351,12 @@ body.cro-v3-ready {
 
 .cro-v3-ready .site-footer__section--social {
   max-width: none;
-  padding: 1.25rem;
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid #cfd6dd;
-  border-radius: 1rem;
-  box-shadow: 0 8px 20px rgba(20, 20, 20, 0.06);
+  padding: 1.5rem 0 0;
+  background: transparent;
+  border: 0;
+  border-top: 1px solid #e6e8eb;
+  border-radius: 0;
+  box-shadow: none;
   justify-self: stretch;
 }
 
@@ -1483,7 +1485,7 @@ body.cro-v3-ready {
   }
 
   .cro-v3-ready .site-footer__section--social {
-    padding: 1.1rem 0.85rem;
+    padding: 1.25rem 0 0;
   }
 
   .cro-v3-ready .site-footer__social-divider {
